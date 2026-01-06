@@ -31,6 +31,17 @@
         public static bool IsNotEmpty(this IEnumerable? enumerable) => !IsEmpty(enumerable);
 
         /// <summary>
+        /// 是否为空
+        /// </summary>
+        /// <param name="value">值</param>
+        public static bool IsEmpty<T>(this IEnumerable<T>? value)
+        {
+            if (value == null)
+                return true;
+            return !value.Any();
+        }
+
+        /// <summary>
         /// 按字段属性判等取交集
         /// </summary>
         /// <typeparam name="TFirst"></typeparam>

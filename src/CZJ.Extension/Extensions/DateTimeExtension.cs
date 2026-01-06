@@ -1,4 +1,6 @@
-﻿namespace CZJ.Extension
+﻿using CZJ.Extension.Helper;
+
+namespace CZJ.Extension
 {
     public static class DateTimeExtension
     {
@@ -132,6 +134,88 @@
         public static string ToStandardDateTimeString(this DateTime dateTime)
         {
             return dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+
+        /// <summary>
+        /// 获取Unix时间戳
+        /// </summary>
+        /// <param name="time">时间</param>
+        public static long GetUnixTimestamp(this DateTime time)
+        {
+            var start = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
+            long ticks = (time - start.Add(new TimeSpan(8, 0, 0))).Ticks;
+            return ConvertHelper.ToLong(ticks / TimeSpan.TicksPerSecond);
+        }
+
+        /// <summary>
+        /// 从Unix时间戳获取时间
+        /// </summary>
+        /// <param name="timestamp">Unix时间戳</param>
+        public static DateTime GetTimeFromUnixTimestamp(this long timestamp)
+        {
+            var start = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
+            TimeSpan span = new TimeSpan(long.Parse(timestamp + "0000000"));
+            return start.Add(span).Add(new TimeSpan(8, 0, 0));
+        }
+
+        /// <summary>
+        /// 获取本地日期
+        /// </summary>
+        /// <param name="date">日期</param>
+        public static DateTime GetLocalDateTime(this DateTime date)
+        {
+            if (date == DateTime.MinValue)
+                return DateTime.MinValue;
+            switch (date.Kind)
+            {
+                case DateTimeKind.Utc:
+                    return date.ToLocalTime();
+                case DateTimeKind.Unspecified:
+                    return DateTime.SpecifyKind(date, DateTimeKind.Local);
+                default:
+                    return date;
+            }
+        }
+
+        /// <summary>
+        /// 获取格式化字符串，不带时分秒，格式："yyyy-MM-dd"
+        /// </summary>
+        /// <param name="dateTime">日期</param>
+        public static string ToDateString(this DateTime dateTime)
+        {
+            dateTime = GetLocalDateTime(dateTime);
+            return dateTime.ToString("yyyy-MM-dd");
+        }
+
+        /// <summary>
+        /// 获取格式化字符串，不带年月日，格式："HH:mm:ss"
+        /// </summary>
+        /// <param name="dateTime">日期</param>
+        public static string ToTimeString(this DateTime dateTime)
+        {
+            dateTime = GetLocalDateTime(dateTime);
+            return dateTime.ToString("HH:mm:ss");
+        }
+
+
+        /// <summary>
+        /// 获取格式化字符串，带毫秒，格式："yyyy-MM-dd HH:mm:ss.fff"
+        /// </summary>
+        /// <param name="dateTime">日期</param>
+        public static string ToMillisecondString(this DateTime dateTime)
+        {
+            dateTime = GetLocalDateTime(dateTime);
+            return dateTime.ToString("yyyy-MM-dd HH:mm:ss.fff");
+        }
+
+        /// <summary>
+        /// 获取中文格式化字符串，不带时分秒，格式："yyyy年MM月dd日"
+        /// </summary>
+        /// <param name="dateTime">日期</param>
+        public static string ToChineseDateString(this DateTime dateTime)
+        {
+            dateTime = GetLocalDateTime(dateTime);
+            return $"{dateTime.Year}年{dateTime.Month}月{dateTime.Day}日";
         }
     }
 }
