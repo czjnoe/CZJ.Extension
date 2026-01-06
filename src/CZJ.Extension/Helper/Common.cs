@@ -37,42 +37,14 @@ namespace CZJ.Extension.Helper
         public static bool IsTest { get; set; }
 
         /// <summary>
-        /// 设置环境变量
-        /// </summary>
-        /// <param name="name">环境变量名</param>
-        /// <param name="value">值</param>
-        public static void SetEnvironmentVariable(string name, object value)
-        {
-            System.Environment.SetEnvironmentVariable(name, value.ToString());
-        }
-
-        /// <summary>
-        /// 获取环境变量
-        /// </summary>
-        /// <param name="name">环境变量名</param>
-        public static string GetEnvironmentVariable(string name)
-        {
-            return System.Environment.GetEnvironmentVariable(name);
-        }
-
-        /// <summary>
-        /// 获取环境变量
-        /// </summary>
-        /// <param name="name">环境变量名</param>
-        public static T GetEnvironmentVariable<T>(string name) where T : IConvertible
-        {
-            return GetEnvironmentVariable(name).ConvertTo<T>();
-        }
-
-        /// <summary>
         /// 获取环境名称
         /// </summary>
         public static string GetEnvironmentName()
         {
-            var environment = GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
+            var environment = EnvironmentHelper.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
             if (environment.IsEmpty() == false)
                 return environment;
-            return GetEnvironmentVariable(DOTNET_ENVIRONMENT);
+            return EnvironmentHelper.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
         }
 
         /// <summary>
@@ -80,14 +52,14 @@ namespace CZJ.Extension.Helper
         /// </summary>
         public static void SetDevelopment()
         {
-            var environment = GetEnvironmentVariable(DOTNET_ENVIRONMENT);
+            var environment = EnvironmentHelper.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
             if (environment.IsEmpty() == false)
                 return;
-            environment = GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
+            environment = EnvironmentHelper.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
             if (environment.IsEmpty() == false)
                 return;
-            SetEnvironmentVariable(DOTNET_ENVIRONMENT, Development);
-            SetEnvironmentVariable(ASPNETCORE_ENVIRONMENT, Development);
+            EnvironmentHelper.SetEnvironmentVariable(DOTNET_ENVIRONMENT, Development);
+            EnvironmentHelper.SetEnvironmentVariable(ASPNETCORE_ENVIRONMENT, Development);
         }
 
         /// <summary>
@@ -95,10 +67,10 @@ namespace CZJ.Extension.Helper
         /// </summary>
         public static bool IsDevelopment()
         {
-            var environment = GetEnvironmentVariable(DOTNET_ENVIRONMENT);
+            var environment = EnvironmentHelper.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
             if (environment == Development)
                 return true;
-            environment = GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
+            environment = EnvironmentHelper.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
             if (environment == Development)
                 return true;
             return false;
