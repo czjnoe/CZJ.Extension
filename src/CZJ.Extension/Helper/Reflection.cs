@@ -251,28 +251,7 @@ namespace CZJ.Extension.Helper
         {
             if (type.IsArray)
                 return true;
-            return IsGenericCollection(type);
-        }
-
-        #endregion
-
-        #region IsGenericCollection(是否泛型集合)
-
-        /// <summary>
-        /// 是否泛型集合
-        /// </summary>
-        /// <param name="type">类型</param>
-        public static bool IsGenericCollection(Type type)
-        {
-            if (!type.IsGenericType)
-                return false;
-            var typeDefinition = type.GetGenericTypeDefinition();
-            return typeDefinition == typeof(IEnumerable<>)
-                   || typeDefinition == typeof(IReadOnlyCollection<>)
-                   || typeDefinition == typeof(IReadOnlyList<>)
-                   || typeDefinition == typeof(ICollection<>)
-                   || typeDefinition == typeof(IList<>)
-                   || typeDefinition == typeof(List<>);
+            return type.IsGenericCollection();
         }
 
         #endregion

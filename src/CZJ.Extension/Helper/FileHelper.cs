@@ -350,6 +350,9 @@
         /// <summary>
         /// 删除文件夹
         /// </summary>
+        /// <param name="dirPath">文件夹目录</param>
+        /// <param name="recursive">是否递归删除</param>
+        /// <returns></returns>
         public static bool DeleteDirectory(string dirPath, bool recursive = true)
         {
             try

@@ -16,5 +16,17 @@
                 return default;
             return source.TryGetValue(key, out var obj) ? obj : default;
         }
+
+        public static void AddOrModify<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey key, TValue value)
+        {
+            if (dic.TryGetValue(key, out _))
+            {
+                dic[key] = value;
+            }
+            else
+            {
+                dic.Add(key, value);
+            }
+        }
     }
 }

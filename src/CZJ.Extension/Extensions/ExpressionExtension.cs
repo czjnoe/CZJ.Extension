@@ -551,7 +551,7 @@ namespace CZJ.Extension
         {
             var methodCallExpression = (MethodCallExpression)expression;
             var left = (MemberExpression)methodCallExpression.Object;
-            if (Reflection.IsGenericCollection(left?.Type))
+            if ((bool)(left?.Type.IsGenericCollection()))
             {
                 var argumentExpression = methodCallExpression.Arguments.FirstOrDefault();
                 if (argumentExpression != null && argumentExpression.NodeType == ExpressionType.MemberAccess)
