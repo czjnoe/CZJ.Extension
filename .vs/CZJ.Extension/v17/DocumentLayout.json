@@ -1,0 +1,86 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Program Files\\PEER Group\\PTO 8.6 SP2\\Code\\CZJ.Extension\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{3FBC3471-D15A-452A-8BE1-ED940E991BAC}|Solution Items{3FBC3471-D15A-452A-8BE1-ED940E991BAC}|C:\\Program Files\\PEER Group\\PTO 8.6 SP2\\Code\\CZJ.Extension\\README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}",
+      "RelativeMoniker": "D:0:0:{3FBC3471-D15A-452A-8BE1-ED940E991BAC}|Solution Items{3FBC3471-D15A-452A-8BE1-ED940E991BAC}|solutionrelative:README.md||{EFC0BB08-EA7D-40C6-A696-C870411A895B}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8136E692-A94C-4475-91D3-F7A0D13AE91E}|CZJ.Extension\\CZJ.Extension.csproj|c:\\program files\\peer group\\pto 8.6 sp2\\code\\czj.extension\\czj.extension\\czj.extension.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{8136E692-A94C-4475-91D3-F7A0D13AE91E}|CZJ.Extension\\CZJ.Extension.csproj|solutionrelative:czj.extension\\czj.extension.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 8,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:138:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:132:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:133:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "README.md",
+              "DocumentMoniker": "C:\\Program Files\\PEER Group\\PTO 8.6 SP2\\Code\\CZJ.Extension\\README.md",
+              "RelativeDocumentMoniker": "README.md",
+              "ToolTip": "C:\\Program Files\\PEER Group\\PTO 8.6 SP2\\Code\\CZJ.Extension\\README.md",
+              "RelativeToolTip": "README.md",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001818|",
+              "WhenOpened": "2026-01-06T06:31:23.842Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "CZJ.Extension",
+              "DocumentMoniker": "C:\\Program Files\\PEER Group\\PTO 8.6 SP2\\Code\\CZJ.Extension\\CZJ.Extension\\CZJ.Extension.csproj",
+              "RelativeDocumentMoniker": "CZJ.Extension\\CZJ.Extension.csproj",
+              "ToolTip": "C:\\Program Files\\PEER Group\\PTO 8.6 SP2\\Code\\CZJ.Extension\\CZJ.Extension\\CZJ.Extension.csproj",
+              "RelativeToolTip": "CZJ.Extension\\CZJ.Extension.csproj",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2026-01-06T06:30:36.255Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

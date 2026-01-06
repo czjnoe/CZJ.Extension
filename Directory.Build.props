@@ -1,0 +1,15 @@
+﻿<!-- 统一编译、生成、MSBuild 设置 -->
+<Project>
+	<!-- 全局属性 -->
+	<PropertyGroup>
+		<!-- 目标框架 -->
+		<TargetFrameworks>net6.0;net8.0;net10.0</TargetFrameworks>
+		<!-- 默认框架，可被项目覆盖 -->
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<!-- 文档生成 -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>1591</NoWarn>
+	</PropertyGroup>
+</Project>
