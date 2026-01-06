@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3FBC3471-D15A-452A-8BE1-ED940E991BAC}"
 	ProjectSection(SolutionItems) = preProject
-		CZJ.Extension\.editorconfig = CZJ.Extension\.editorconfig
-		Directory.Build.props = Directory.Build.props
-		README.md = README.md
+		..\.editorconfig = ..\.editorconfig
+		..\Directory.Build.props = ..\Directory.Build.props
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{7C5B1C6D-863C-4E0C-B9C7-3E294D1FA0E9}"
