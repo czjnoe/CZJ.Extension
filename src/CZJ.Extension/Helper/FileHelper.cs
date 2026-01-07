@@ -321,7 +321,7 @@
 
             var content = File.ReadAllText(path);
 
-            return JsonConvert.DeserializeObject<T>(content);
+            return content.ToObject<T>();
         }
 
         #endregion

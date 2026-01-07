@@ -221,7 +221,7 @@
                     }
                     else if (!string.IsNullOrWhiteSpace(content))
                     {
-                        result.Data = System.Text.Json.JsonSerializer.Deserialize<TResponse>(content, options.JsonOptions);
+                        result.Data = content.ToObject<TResponse>(options.JsonSetting);
                     }
                 }
                 else
@@ -306,7 +306,7 @@
                 }
                 else
                 {
-                    var json = System.Text.Json.JsonSerializer.Serialize(data, options.JsonOptions);
+                    var json = data.ToJson(options.JsonSetting);
                     request.Content = new StringContent(json, options.Encoding, options.ContentType);
                 }
             }
@@ -318,7 +318,7 @@
     }
 
     /// <summary>
-    /// 默认的 HttpClientFactory 实现（用于非 DI 场景）
+    /// 默认的 HttpClientFactory 实现
     /// </summary>
     public class DefaultHttpClientFactory : IHttpClientFactory
     {
@@ -393,10 +393,11 @@
         /// <summary>
         /// JSON 序列化选项
         /// </summary>
-        public JsonSerializerOptions JsonOptions { get; set; } = new()
+        public JsonSerializerSettings JsonSetting { get; set; } = new()
         {
-            PropertyNameCaseInsensitive = true,
-            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            Formatting = Newtonsoft.Json.Formatting.Indented,
+            NullValueHandling = NullValueHandling.Include,
+            DefaultValueHandling = DefaultValueHandling.Include,
         };
     }
 

@@ -4,12 +4,10 @@
     {
         public static T? Clone<T>(this T source)
         {
-            var serialized = JsonConvert.SerializeObject(source);
-
-            return JsonConvert.DeserializeObject<T>(serialized);
+            var serialized = source.ToJson();
+            return serialized.ToObject<T>();
         }
 
-      
         public static Dictionary<string, object> NonNullPropertiesToDictionary(this object @object)
         {
             Dictionary<string, object> dictionary = new();
@@ -27,7 +25,6 @@
             return dictionary;
         }
 
-    
         public static Dictionary<string, object?> PropertiesToDictionary(this object @object)
         {
             Dictionary<string, object?> dictionary = new();

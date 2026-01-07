@@ -2,15 +2,24 @@
 {
     public static class JsonExtension
     {
+        private static JsonSerializerSettings defaultJsonSettings => new JsonSerializerSettings
+        {
+            Formatting = Newtonsoft.Json.Formatting.Indented,
+            NullValueHandling = NullValueHandling.Include,
+            DefaultValueHandling = DefaultValueHandling.Include
+        };
+
         /// <summary>
         ///     对象转json
         /// </summary>
         /// <param name="o"></param>
         /// <returns></returns>
-        public static string ToJson<T>(this T o)
+        public static string ToJson<T>(this T o, JsonSerializerSettings jsonSettings = null)
         {
-            if (o == null) return "";
-            return JsonConvert.SerializeObject(o);
+            if (o == null)
+                return "";
+
+            return JsonConvert.SerializeObject(o, jsonSettings ?? defaultJsonSettings);
         }
 
         /// <summary>
@@ -19,10 +28,12 @@
         /// <param name="str"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T ToObject<T>(this string str)
+        public static T ToObject<T>(this string str, JsonSerializerSettings jsonSettings = null)
         {
-            if (str == null) return default;
-            return JsonConvert.DeserializeObject<T>(str);
+            if (str == null)
+                return default;
+
+            return JsonConvert.DeserializeObject<T>(str, jsonSettings?? defaultJsonSettings);
         }
 
         /// <summary>

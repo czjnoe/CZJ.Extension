@@ -49,7 +49,7 @@
             try
             {
                 var jsonContent = File.ReadAllText(_filePath);
-                return JsonConvert.DeserializeObject<T>(jsonContent, _jsonSettings);
+                return jsonContent.ToObject<T>(_jsonSettings);
             }
             catch (Exception ex)
             {
@@ -137,7 +137,7 @@
                 currentToken[lastSegment] = JToken.FromObject(value);
 
                 // 保存
-                var json = JsonConvert.SerializeObject(jObject, _jsonSettings);
+                var json = jObject.ToJson(_jsonSettings);
                 File.WriteAllText(_filePath, json);
             }
             catch (Exception ex)
@@ -161,7 +161,7 @@
                     EnsureDirectoryExists();
                 }
 
-                var json = JsonConvert.SerializeObject(data, _jsonSettings);
+                var json = data.ToJson(_jsonSettings);
                 File.WriteAllText(_filePath, json);
             }
             catch (Exception ex)
@@ -204,7 +204,7 @@
                 }
 
                 // 保存
-                var json = JsonConvert.SerializeObject(jObject, _jsonSettings);
+                var json = jObject.ToJson(_jsonSettings);
                 File.WriteAllText(_filePath, json);
             }
             catch (Exception ex)
@@ -301,7 +301,7 @@
                     MergeArrayHandling = MergeArrayHandling.Union
                 });
 
-                var json = JsonConvert.SerializeObject(existingObject, _jsonSettings);
+                var json = existingObject.ToJson(_jsonSettings);
                 File.WriteAllText(_filePath, json);
             }
             catch (Exception ex)
