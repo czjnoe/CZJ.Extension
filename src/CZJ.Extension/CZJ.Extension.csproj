@@ -12,7 +12,7 @@
         <!--  NuGet 包源中唯一标识你的包的字符串，只能包含字母、数字、点号(.)、连字符(-) -->
         <PackageId>CZJ.Extension</PackageId>
         <!-- 版本Id -->
-        <Version>1.1.0</Version>
+        <Version>1.1.2</Version>
         <!-- 作者的 Id，如果要发布到 nuget.org，那么这里就是 NuGet 用户 Id。 -->
         <Authors>CZJ</Authors>
         <Company>CZJ</Company>
@@ -22,10 +22,10 @@
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <!-- 跳过 NuGet 包分析 -->
         <NoPackageAnalysis>true</NoPackageAnalysis>
-        <!-- 这个NuGet包是“仅用于开发，不用于发布”的工具依赖 -->
+        <!-- 这个NuGet包是“仅用于开发，不用于发布”的工具依赖 --><!--
         <DevelopmentDependency>true</DevelopmentDependency>
-        <!-- 指定 NuGet 包中 DLL 的放置目录 tasks -->
-        <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+        --><!-- 指定 NuGet 包中 DLL 的放置目录 tasks --><!--
+        <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>-->
         <!-- 包输出路径 -->
         <PackageOutputPath>$(MSBuildProjectDirectory)\..\..</PackageOutputPath>
         <!-- NuGet 包的项目主页 URL，用户可以通过这个链接访问项目详情 -->
