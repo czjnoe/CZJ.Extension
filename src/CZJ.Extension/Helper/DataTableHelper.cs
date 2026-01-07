@@ -35,22 +35,70 @@
             return dt.Rows.Count > 0;
         }
 
-        /// <summary>
-        /// datatable转List
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="dt"></param>
-        /// <returns></returns>
-        public static List<T> ToList<T>(this DataTable dt) where T : class, new()
+        public static T ToEntity<T>(this DataTable table) where T : new()
         {
-            var list = new List<T>();
-            if (dt == null || dt.Rows.Count == 0)
+            T entity = new T();
+            foreach (DataRow row in table.Rows)
             {
-                return list;
+                foreach (var item in entity.GetType().GetProperties())
+                {
+                    if (row.Table.Columns.Contains(item.Name))
+                    {
+                        if (DBNull.Value != row[item.Name])
+                        {
+                            Type newType = item.PropertyType;
+                            //判断type类型是否为泛型，因为nullable是泛型类,
+                            if (newType.IsGenericType
+                                    && newType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))//判断convertsionType是否为nullable泛型类
+                            {
+                                //如果type为nullable类，声明一个NullableConverter类，该类提供从Nullable类到基础基元类型的转换
+                                System.ComponentModel.NullableConverter nullableConverter = new System.ComponentModel.NullableConverter(newType);
+                                //将type转换为nullable对的基础基元类型
+                                newType = nullableConverter.UnderlyingType;
+                            }
+
+                            item.SetValue(entity, Convert.ChangeType(row[item.Name], newType), null);
+
+                        }
+
+                    }
+                }
             }
 
-            list.AddRange(dt.Rows.Cast<DataRow>().Select(info => DataTableBuilder<T>.CreateBuilder(dt.Rows[0]).Build(info)));
-            return list;
+            return entity;
+        }
+
+        public static List<T> ToEntities<T>(this DataTable table) where T : new()
+        {
+            List<T> entities = new List<T>();
+            if (table == null)
+                return null;
+            foreach (DataRow row in table.Rows)
+            {
+                T entity = new T();
+                foreach (var item in entity.GetType().GetProperties())
+                {
+                    if (table.Columns.Contains(item.Name))
+                    {
+                        if (DBNull.Value != row[item.Name])
+                        {
+                            Type newType = item.PropertyType;
+                            //判断type类型是否为泛型，因为nullable是泛型类,
+                            if (newType.IsGenericType
+                                    && newType.GetGenericTypeDefinition().Equals(typeof(Nullable<>)))//判断convertsionType是否为nullable泛型类
+                            {
+                                //如果type为nullable类，声明一个NullableConverter类，该类提供从Nullable类到基础基元类型的转换
+                                System.ComponentModel.NullableConverter nullableConverter = new System.ComponentModel.NullableConverter(newType);
+                                //将type转换为nullable对的基础基元类型
+                                newType = nullableConverter.UnderlyingType;
+                            }
+                            item.SetValue(entity, Convert.ChangeType(row[item.Name], newType), null);
+                        }
+                    }
+                }
+                entities.Add(entity);
+            }
+            return entities;
         }
 
         /// <summary>
@@ -92,6 +140,74 @@
             }).ToArray());
             list.ForEach(item => result.LoadDataRow(properties.Select(p => p.GetValue(item)).ToArray(), true));
             return result;
+        }
+
+        /// <summary>
+        /// 将指定的集合转换成DataTable。
+        /// </summary>
+        /// <param name="list">将指定的集合。</param>
+        /// <returns>返回转换后的DataTable。</returns>
+        public static DataTable ToDataTable(this IList list)
+        {
+            DataTable table = new DataTable();
+            if (list.Count > 0)
+            {
+                PropertyInfo[] propertys = list[0].GetType().GetProperties();
+                foreach (PropertyInfo pi in propertys)
+                {
+                    Type pt = pi.PropertyType;
+                    if ((pt.IsGenericType) && (pt.GetGenericTypeDefinition() == typeof(Nullable<>)))
+                    {
+                        pt = pt.GetGenericArguments()[0];
+                    }
+                    table.Columns.Add(new DataColumn(pi.Name, pt));
+                }
+
+                for (int i = 0; i < list.Count; i++)
+                {
+                    ArrayList tempList = new ArrayList();
+                    foreach (PropertyInfo pi in propertys)
+                    {
+                        object obj = pi.GetValue(list[i], null);
+                        tempList.Add(obj);
+                    }
+                    object[] array = tempList.ToArray();
+                    table.LoadDataRow(array, true);
+                }
+            }
+            return table;
+        }
+
+        public static DataTable ToDataTable<T>(this List<T> list)
+        {
+            DataTable table = new DataTable();
+            //创建列头
+            PropertyInfo[] propertys = typeof(T).GetProperties();
+            foreach (PropertyInfo pi in propertys)
+            {
+                Type pt = pi.PropertyType;
+                if ((pt.IsGenericType) && (pt.GetGenericTypeDefinition() == typeof(Nullable<>)))
+                {
+                    pt = pt.GetGenericArguments()[0];
+                }
+                table.Columns.Add(new DataColumn(pi.Name, pt));
+            }
+            //创建数据行
+            if (list.Count > 0)
+            {
+                for (int i = 0; i < list.Count; i++)
+                {
+                    ArrayList tempList = new ArrayList();
+                    foreach (PropertyInfo pi in propertys)
+                    {
+                        object obj = pi.GetValue(list[i], null);
+                        tempList.Add(obj);
+                    }
+                    object[] array = tempList.ToArray();
+                    table.LoadDataRow(array, true);
+                }
+            }
+            return table;
         }
 
         /// <summary>
@@ -218,72 +334,6 @@
             }
 
             return dt;
-        }
-    }
-
-    internal class DataTableBuilder<T>
-    {
-        private static readonly MethodInfo GetValueMethod = typeof(DataRow).GetMethod("get_Item", new[]
-        {
-            typeof(int)
-        });
-
-        private static readonly MethodInfo IsDbNullMethod = typeof(DataRow).GetMethod("IsNull", new[]
-        {
-            typeof(int)
-        });
-
-        private delegate T Load(DataRow dataRecord);
-
-        private Load _handler;
-
-        private DataTableBuilder()
-        {
-        }
-
-        public T Build(DataRow dataRecord)
-        {
-            return _handler(dataRecord);
-        }
-
-        public static DataTableBuilder<T> CreateBuilder(DataRow dataRecord)
-        {
-            DynamicMethod methodCreateEntity = new DynamicMethod("DynamicCreateEntity", typeof(T), new[]
-            {
-                typeof(DataRow)
-            }, typeof(T), true);
-            var generator = methodCreateEntity.GetILGenerator();
-            var result = generator.DeclareLocal(typeof(T));
-            generator.Emit(OpCodes.Newobj, typeof(T).GetConstructor(Type.EmptyTypes));
-            generator.Emit(OpCodes.Stloc, result);
-            for (int i = 0; i < dataRecord.ItemArray.Length; i++)
-            {
-                var propertyInfo = typeof(T).GetProperty(dataRecord.Table.Columns[i].ColumnName);
-                var endIfLabel = generator.DefineLabel();
-                if (propertyInfo == null || propertyInfo.GetSetMethod() == null)
-                {
-                    continue;
-                }
-
-                generator.Emit(OpCodes.Ldarg_0);
-                generator.Emit(OpCodes.Ldc_I4, i);
-                generator.Emit(OpCodes.Callvirt, IsDbNullMethod);
-                generator.Emit(OpCodes.Brtrue, endIfLabel);
-                generator.Emit(OpCodes.Ldloc, result);
-                generator.Emit(OpCodes.Ldarg_0);
-                generator.Emit(OpCodes.Ldc_I4, i);
-                generator.Emit(OpCodes.Callvirt, GetValueMethod);
-                generator.Emit(OpCodes.Unbox_Any, propertyInfo.PropertyType);
-                generator.Emit(OpCodes.Callvirt, propertyInfo.GetSetMethod());
-                generator.MarkLabel(endIfLabel);
-            }
-
-            generator.Emit(OpCodes.Ldloc, result);
-            generator.Emit(OpCodes.Ret);
-            return new DataTableBuilder<T>
-            {
-                _handler = (Load)methodCreateEntity.CreateDelegate(typeof(Load))
-            };
         }
     }
 }
