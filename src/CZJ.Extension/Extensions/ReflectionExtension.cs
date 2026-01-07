@@ -155,5 +155,46 @@
                 throw new ArgumentNullException(nameof(instance));
             return instance.GetType().GetProperty(member.Name)?.GetValue(instance);
         }
+
+        /// <summary>
+        /// 获取特性
+        /// </summary>
+        /// <typeparam name="TAttributeType"></typeparam>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static List<TAttributeType> GetCustomAttributes<TAttributeType>(this Type type) where TAttributeType : Attribute
+        {
+            var attributeType = typeof(TAttributeType);
+            if (!type.IsDefined(attributeType, false))
+            {
+                return new List<TAttributeType>();
+            }
+            var attrs = type.GetCustomAttributes(attributeType, false);
+            if (attrs.Length > 0)
+            {
+                List<TAttributeType> list = new List<TAttributeType>();
+                int length = attrs.Length;
+                for (int i = 0; i < length; i++)
+                {
+                    list.Add(attrs[i] as TAttributeType);
+                }
+                return list;
+            }
+            else
+            {
+                return new List<TAttributeType>();
+            }
+        }
+
+        /// <summary>
+        /// 获取特性 第一个
+        /// </summary>
+        /// <typeparam name="TAttributeType"></typeparam>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public static TAttributeType GetFirstCustomAttribute<TAttributeType>(this Type type) where TAttributeType : Attribute
+        {
+            return GetCustomAttributes<TAttributeType>(type).FirstOrDefault();
+        }
     }
 }

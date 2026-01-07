@@ -12,7 +12,7 @@
             return attribute?.Description;
         }
 
-        public static List<Tuple<string, string>> GetEnumsToTuple<T>()
+        public static List<Tuple<string, string>> GetEnumTuple<T>() where T : struct, Enum
         {
             List<Tuple<string, string>> list = new List<Tuple<string, string>>();
             foreach (var item in Enum.GetValues(typeof(T)))
@@ -23,12 +23,35 @@
         }
 
         /// <summary>
+        /// 根据枚举获取字典
+        /// </summary>
+        /// <typeparam name="T">枚举类型</typeparam>
+        /// <param name="isReverse">是否反转</param>
+        /// <returns></returns>
+        public static Dictionary<string, string> GetEnumDictionary<T>(bool isReverse = false) where T : struct, Enum
+        {
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            foreach (var item in Enum.GetValues(typeof(T)))
+            {
+                if (!isReverse)
+                {
+                    dic.Add(Convert.ToInt64(item).ToString(), item.ToString());
+                }
+                else
+                {
+                    dic.Add(item.ToString(), Convert.ToInt64(item).ToString());
+                }
+            }
+            return dic;
+        }
+
+        /// <summary>
         /// 枚举 int 转 枚举名称
         /// </summary>
         /// <typeparam name="T">枚举</typeparam>
         /// <param name="itemValue">int值</param>
         /// <returns></returns>
-        public static string ConvertEnumToString<T>(int itemValue)
+        public static string ConvertEnumToString<T>(int itemValue) where T : struct, Enum
         {
             return Enum.Parse(typeof(T), itemValue.ToString()).ToString();
         }
@@ -70,9 +93,9 @@
         /// <param name="itemValue"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public static string GetEnumDescription<TEnum>(this int itemValue, string defaultValue = "")
+        public static string GetEnumDescription<T>(this int itemValue, string defaultValue = "") where T : struct, Enum
         {
-            Enum enumModel = Enum.Parse(typeof(TEnum), itemValue.ToString()) as Enum;
+            Enum enumModel = Enum.Parse(typeof(T), itemValue.ToString()) as Enum;
             var attr = GetEnumAttribute(enumModel, typeof(DescriptionAttribute));
             return (attr as DescriptionAttribute)?.Description ?? defaultValue;
         }
@@ -83,7 +106,7 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="key"></param>
         /// <returns></returns>
-        public static bool IsDefined<T>(string key)
+        public static bool IsDefined<T>(string key) where T : struct, Enum
         {
             bool isDefined = Enum.IsDefined(typeof(T), key);
             return isDefined;
@@ -106,15 +129,25 @@
         }
 
         /// <summary>
-        /// 获取枚举 
+        /// 获取枚举
         /// </summary>
-        /// <typeparam name="T">枚举 类型</typeparam>
-        /// <param name="value">枚举 value</param>
-        /// <returns></returns>
-        public static T GetEnumByValue<T>(this object value)
+        public static T ToEnum<T>(this string value, T defaultValue = default) where T : struct, Enum
         {
-            var res = (T)Enum.Parse(typeof(T), value.ToString());
-            return res;
+            if (string.IsNullOrWhiteSpace(value))
+                return defaultValue;
+
+            return Enum.TryParse<T>(value, true, out var result) ? result : defaultValue;
+        }
+
+        /// <summary>
+        /// 从整数转换为枚举
+        /// </summary>
+        public static T ToEnum<T>(this int value, T defaultValue = default) where T : struct, Enum
+        {
+            if (Enum.IsDefined(typeof(T), value))
+                return (T)Enum.ToObject(typeof(T), value);
+
+            return defaultValue;
         }
 
         /// <summary>
@@ -123,19 +156,30 @@
         /// <typeparam name="T">枚举 类型</typeparam>
         /// <param name="value">枚举 value</param>
         /// <returns></returns>
-        public static string GetEnumNameByValue<T>(this object value)
+        public static string GetEnumNameByValue<T>(this string value) where T : struct, Enum
         {
-            var res = GetEnumByValue<T>(value);
+            var res = ToEnum<T>(value);
             return res.ToString();
         }
 
+        /// <summary>
+        /// 获取枚举 name
+        /// </summary>
+        /// <typeparam name="T">枚举 类型</typeparam>
+        /// <param name="value">枚举 value</param>
+        /// <returns></returns>
+        public static string GetEnumNameByValue<T>(this int value) where T : struct, Enum
+        {
+            var res = ToEnum<T>(value);
+            return res.ToString();
+        }
 
         /// <summary>
         /// 通过枚举类型获取枚举列表
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static List<T> GetEnumNameList<T>()
+        public static List<T> GetEnumNameList<T>() where T : struct, Enum
         {
             List<T> list = Enum.GetValues(typeof(T)).OfType<T>().ToList();
             return list;
@@ -159,16 +203,56 @@
         }
 
         /// <summary>
-        /// 通过枚举类型获取所有枚举
+        /// 获取枚举值列表
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
-        public static IEnumerable<T> GetAllItems<T>() where T : struct
+        public static List<EnumItem<T>> GetEnumItems<T>() where T : Enum
         {
-            foreach (object item in Enum.GetValues(typeof(T)))
-            {
-                yield return (T)item;
-            }
+            return Enum.GetValues(typeof(T))
+                .Cast<T>()
+                .Select(e => new EnumItem<T>
+                {
+                    Value = e,
+                    Text = e.GetDescription(),
+                    IntValue = ConvertHelper.To<int>(e),
+                })
+                .ToList();
         }
+
+        /// <summary>
+        /// 检查枚举是否有指定的标志位（用于 Flags 枚举）
+        /// </summary>
+        public static bool HasFlag<T>(this T value, T flag) where T : Enum
+        {
+            long valueAsLong = Convert.ToInt64(value);
+            long flagAsLong = Convert.ToInt64(flag);
+            return (valueAsLong & flagAsLong) == flagAsLong;
+        }
+
+        /// <summary>
+        /// 添加标志位（用于 Flags 枚举）
+        /// </summary>
+        public static T AddFlag<T>(this T value, T flag) where T : Enum
+        {
+            long valueAsLong = Convert.ToInt64(value);
+            long flagAsLong = Convert.ToInt64(flag);
+            return (T)Enum.ToObject(typeof(T), valueAsLong | flagAsLong);
+        }
+
+        /// <summary>
+        /// 移除标志位（用于 Flags 枚举）
+        /// </summary>
+        public static T RemoveFlag<T>(this T value, T flag) where T : Enum
+        {
+            long valueAsLong = Convert.ToInt64(value);
+            long flagAsLong = Convert.ToInt64(flag);
+            return (T)Enum.ToObject(typeof(T), valueAsLong & ~flagAsLong);
+        }
+    }
+
+    public class EnumItem<T> where T : Enum
+    {
+        public T Value { get; set; }
+        public string Text { get; set; }
+        public int IntValue { get; set; }
     }
 }
