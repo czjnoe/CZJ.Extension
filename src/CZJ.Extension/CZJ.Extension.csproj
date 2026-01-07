@@ -12,7 +12,7 @@
         <!--  NuGet 包源中唯一标识你的包的字符串，只能包含字母、数字、点号(.)、连字符(-) -->
         <PackageId>CZJ.Extension</PackageId>
         <!-- 版本Id -->
-        <Version>1.0.0</Version>
+        <Version>1.1.0</Version>
         <!-- 作者的 Id，如果要发布到 nuget.org，那么这里就是 NuGet 用户 Id。 -->
         <Authors>CZJ</Authors>
         <Company>CZJ</Company>
@@ -36,8 +36,15 @@
         <RepositoryType>git</RepositoryType>
         <!-- NuGet 包的标签/关键词，用于在 NuGet 上搜索时更容易被找到(使用空格分隔多个标签) -->
         <PackageTags>Extension Util Helper</PackageTags>
+        <!-- 指定 NuGet 包的 README 文件 -->
+        <PackageReadmeFile>NugetReadme.md</PackageReadmeFile>
     </PropertyGroup>
 
+    <!-- None 表示这一项要显示到 Visual Studio 解决方案中（其实对于不认识的文件，None 就是默认值）；Include 表示相对于项目文件的路径（支持通配符）；Pack 表示这一项要打包到 NuGet；PackagePath 表示这一项打包到 NuGet 中的路径 -->
+    <ItemGroup>
+        <None Include="..\..\NugetReadme.md" Pack="True" PackagePath="" />
+    </ItemGroup>
+    
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
         <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.1" />
@@ -51,11 +58,10 @@
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.1" />
         <PackageReference Include="System.Drawing.Common" Version="10.0.1" />
-        <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
     </ItemGroup>
 
     <ItemGroup>
         <EditorConfigFiles Remove="E:\Code\c#练习\CZJ.Extension\src\CZJ.Extension\.editorconfig" />
     </ItemGroup>
-
+    
 </Project>
