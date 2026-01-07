@@ -1,28 +1,61 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.1" />
-    <PackageReference Include="System.Drawing.Common" Version="10.0.1" />
-    <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
-  </ItemGroup>
+    <!-- Nuget打包 -->
+    <PropertyGroup>
+        <!-- 此值设为 true，才会在编译之后生成 NuGet 包。 -->
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <!--  NuGet 包源中唯一标识你的包的字符串，只能包含字母、数字、点号(.)、连字符(-) -->
+        <PackageId>CZJ.Extension</PackageId>
+        <!-- 版本Id -->
+        <Version>1.0.0</Version>
+        <!-- 作者的 Id，如果要发布到 nuget.org，那么这里就是 NuGet 用户 Id。 -->
+        <Authors>CZJ</Authors>
+        <Company>CZJ</Company>
+        <!-- Nuget描述 -->
+        <Description>My Extension Tool</Description>
+        <!-- 使用 SPDX 许可证表达式 -->
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <!-- 跳过 NuGet 包分析 -->
+        <NoPackageAnalysis>true</NoPackageAnalysis>
+        <!-- 这个NuGet包是“仅用于开发，不用于发布”的工具依赖 -->
+        <DevelopmentDependency>true</DevelopmentDependency>
+        <!-- 指定 NuGet 包中 DLL 的放置目录 tasks -->
+        <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+        <!-- 包输出路径 -->
+        <PackageOutputPath>$(MSBuildProjectDirectory)\..\..</PackageOutputPath>
+        <!-- NuGet 包的项目主页 URL，用户可以通过这个链接访问项目详情 -->
+        <PackageProjectUrl>https://github.com/czjnoe/CZJ.Extension</PackageProjectUrl>
+        <!-- 源代码仓库地址，通常指向 GitHub 或其他代码托管平台 -->
+        <RepositoryUrl>https://github.com/czjnoe/CZJ.Extension</RepositoryUrl>
+        <!-- 指定仓库类型为 Git -->
+        <RepositoryType>git</RepositoryType>
+        <!-- NuGet 包的标签/关键词，用于在 NuGet 上搜索时更容易被找到(使用空格分隔多个标签) -->
+        <PackageTags>Extension Util Helper</PackageTags>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <EditorConfigFiles Remove="E:\Code\c#练习\CZJ.Extension\src\CZJ.Extension\.editorconfig" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.DependencyModel" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.1" />
+        <PackageReference Include="System.Drawing.Common" Version="10.0.1" />
+        <PackageReference Include="System.Runtime.InteropServices" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EditorConfigFiles Remove="E:\Code\c#练习\CZJ.Extension\src\CZJ.Extension\.editorconfig" />
+    </ItemGroup>
 
 </Project>
