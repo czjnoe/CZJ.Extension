@@ -9,6 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Configs\appsettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Configs\appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CZJ.Extension\CZJ.Extension.csproj" />
   </ItemGroup>
 

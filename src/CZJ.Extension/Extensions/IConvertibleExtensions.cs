@@ -1,6 +1,4 @@
-﻿
-
-namespace CZJ.Extension
+﻿namespace CZJ.Extension
 {
     public static class IConvertibleExtensions
     {

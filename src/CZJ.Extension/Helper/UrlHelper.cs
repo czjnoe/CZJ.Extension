@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CZJ.Extension.Helper
+﻿namespace CZJ.Extension
 {
     public class UrlHelper
     {
@@ -25,6 +19,26 @@ namespace CZJ.Extension.Helper
         public static string UrlDecode(string data)
         {
             return System.Web.HttpUtility.UrlDecode(data, System.Text.Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// 根据字段拼接get参数
+        /// </summary>
+        /// <param name="dic"></param>
+        /// <returns></returns>
+        public static string GetPars(Dictionary<string, object> dic)
+        {
+
+            StringBuilder sb = new StringBuilder();
+            string urlPars = null;
+            bool isEnter = false;
+            foreach (var item in dic)
+            {
+                sb.Append($"{(isEnter ? "&" : "")}{item.Key}={item.Value}");
+                isEnter = true;
+            }
+            urlPars = sb.ToString();
+            return urlPars;
         }
     }
 }

@@ -28,4 +28,11 @@ global using System.Data;
 global using System.Reflection.Emit;
 global using System.IO.Pipes;
 global using System.Configuration;
-
+global using Newtonsoft.Json.Linq;
+global using Microsoft.Extensions.DependencyModel;
+global using System.Runtime.Loader;
+global using Microsoft.Extensions.Configuration;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Extensions.Logging.Abstractions;
+global using System.Text.Json;
+global using System.Xml.Linq;

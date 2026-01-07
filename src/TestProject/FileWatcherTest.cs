@@ -1,4 +1,4 @@
-﻿using CZJ.Extension.Helper;
+﻿using CZJ.Extension;
 using Microsoft.Extensions.FileSystemGlobbing;
 using System;
 using System.Collections.Generic;

@@ -1,6 +1,4 @@
-﻿using CZJ.Extension.Helper;
-
-namespace CZJ.Extension
+﻿namespace CZJ.Extension
 {
     /// <summary>
     /// 表达式扩展

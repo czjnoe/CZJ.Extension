@@ -1,7 +1,4 @@
-﻿using Microsoft.Extensions.DependencyModel;
-using System.Runtime.Loader;
-
-namespace CZJ.Extension
+﻿namespace CZJ.Extension
 {
     public static class AssemblyExtension
     {

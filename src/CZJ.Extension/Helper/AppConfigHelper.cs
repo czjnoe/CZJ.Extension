@@ -8,7 +8,7 @@
             {
                 ExeConfigFilename = filePath
             };
-            var config = ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
+            var config = System.Configuration.ConfigurationManager.OpenMappedExeConfiguration(fileMap, ConfigurationUserLevel.None);
             return config;
         }
 
@@ -37,7 +37,7 @@
 
         public static bool TryGet<T>(string name, out T? value)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             return config.TryGet(name, out value);
         }
 
@@ -65,7 +65,7 @@
 
         public static bool TryGetOrSet<T>(string name, out T? value, T? defaultValue = default)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             return config.TryGetOrSet(name, out value, defaultValue);
         }
 
@@ -77,7 +77,7 @@
 
         public static void Set<T>(string name, T value)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             config.Set(name, value);
         }
 
@@ -97,7 +97,7 @@
 
         public static void SetOrAdd<T>(string name, T value)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             config.SetOrAdd(name, value);
         }
         public static T GetOrAdd<T>(this Configuration config, string name, T? defaultValue)
@@ -109,7 +109,7 @@
 
         public static T GetOrAdd<T>(string name, T? defaultValue)
         {
-            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             return config.GetOrAdd(name, defaultValue);
         }
     }

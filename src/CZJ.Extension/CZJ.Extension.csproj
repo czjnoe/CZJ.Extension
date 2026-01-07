@@ -24,8 +24,4 @@
     <EditorConfigFiles Remove="E:\Code\c#练习\CZJ.Extension\src\CZJ.Extension\.editorconfig" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="E:\Code\c#练习\CZJ.Extension\src\CZJ.Extension\.editorconfig" />
-  </ItemGroup>
-
 </Project>
