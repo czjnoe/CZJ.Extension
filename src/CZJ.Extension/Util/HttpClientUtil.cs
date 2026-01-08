@@ -3,7 +3,7 @@
     /// <summary>
     /// HttpClient 帮助类
     /// </summary>
-    public class HttpClientHelper
+    public class HttpClientUtil
     {
         private static readonly Lazy<IHttpClientFactory> _factory = new(() =>
             new DefaultHttpClientFactory());
@@ -13,7 +13,7 @@
         /// <summary>
         /// 构造函数（依赖注入）
         /// </summary>
-        public HttpClientHelper(IHttpClientFactory httpClientFactory)
+        public HttpClientUtil(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
@@ -21,7 +21,7 @@
         /// <summary>
         /// 构造函数（单例模式）
         /// </summary>
-        public HttpClientHelper() : this(_factory.Value)
+        public HttpClientUtil() : this(_factory.Value)
         {
         }
 

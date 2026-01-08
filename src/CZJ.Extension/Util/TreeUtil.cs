@@ -3,15 +3,15 @@
     /// <summary>
     /// 树工具类，用于构建树结构
     /// </summary>
-    public class TreeUtil<T, D>
+    public class TreeUtil<TKey, TData>
     {
-        private List<TreeNode<T, D>> _nodes;
+        private List<TreeNode<TKey, TData>> _nodes;
 
         /// <summary>
         /// 构造函数
         /// </summary>
         /// <param name="nodes">树节点列表</param>
-        public TreeUtil(List<TreeNode<T, D>> nodes)
+        public TreeUtil(List<TreeNode<TKey, TData>> nodes)
         {
             _nodes = nodes;
         }
@@ -20,10 +20,10 @@
         /// 构建树结构
         /// </summary>
         /// <returns>根节点</returns>
-        public TreeNode<T, D> BuildTree()
+        public TreeNode<TKey, TData> BuildTree()
         {
             // 获取根节点
-            var root = _nodes.FirstOrDefault(n => n.ParentId.Equals(default(T)));
+            var root = _nodes.FirstOrDefault(n => n.ParentId.Equals(default(TKey)));
 
             if (root == null)
             {
@@ -36,7 +36,7 @@
             return root;
         }
 
-        private void BuildTree(TreeNode<T, D> node)
+        private void BuildTree(TreeNode<TKey, TData> node)
         {
             node.Children = _nodes.Where(n => n.ParentId.Equals(node.Id)).ToList();
 
@@ -54,9 +54,9 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>父节点列表，从根节点到该节点的顺序</returns>
-        public List<TreeNode<T, D>> GetParents(TreeNode<T, D> node)
+        public List<TreeNode<TKey, TData>> GetParents(TreeNode<TKey, TData> node)
         {
-            var parents = new List<TreeNode<T, D>>();
+            var parents = new List<TreeNode<TKey, TData>>();
             var parent = GetParent(node.Id);
             while (parent != null)
             {
@@ -71,7 +71,7 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>节点深度，根节点的深度为0</returns>
-        public int GetDepth(TreeNode<T, D> node)
+        public int GetDepth(TreeNode<TKey, TData> node)
         {
             return GetParents(node).Count;
         }
@@ -81,14 +81,14 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>子孙节点列表</returns>
-        public List<TreeNode<T, D>> GetDescendants(TreeNode<T, D> node)
+        public List<TreeNode<TKey, TData>> GetDescendants(TreeNode<TKey, TData> node)
         {
-            var descendants = new List<TreeNode<T, D>>();
+            var descendants = new List<TreeNode<TKey, TData>>();
             GetDescendants(node, descendants);
             return descendants;
         }
 
-        private void GetDescendants(TreeNode<T, D> node, List<TreeNode<T, D>> descendants)
+        private void GetDescendants(TreeNode<TKey, TData> node, List<TreeNode<TKey, TData>> descendants)
         {
             descendants.Add(node);
             if (node.Children.Count > 0)
@@ -100,9 +100,14 @@
             }
         }
 
-        private TreeNode<T, D> GetParent(T id)
+        private TreeNode<TKey, TData> GetParent(TKey id)
         {
-            return _nodes.FirstOrDefault(n => n.Id.Equals(id));
+            var node = _nodes.FirstOrDefault(n => n.Id.Equals(id));
+            if (node == null)
+            {
+                return null;
+            }
+            return _nodes.FirstOrDefault(n => n.Id.Equals(node.ParentId));
         }
 
         /// <summary>
@@ -110,12 +115,12 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>兄弟节点列表</returns>
-        public List<TreeNode<T, D>> GetSiblings(TreeNode<T, D> node)
+        public List<TreeNode<TKey, TData>> GetSiblings(TreeNode<TKey, TData> node)
         {
             var parent = GetParent(node.Id);
             if (parent == null)
             {
-                return new List<TreeNode<T, D>>();
+                return new List<TreeNode<TKey, TData>>();
             }
             return parent.Children.Where(n => !n.Id.Equals(node.Id)).ToList();
         }
@@ -125,7 +130,7 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>兄弟节点数量</returns>
-        public int GetSiblingCount(TreeNode<T, D> node)
+        public int GetSiblingCount(TreeNode<TKey, TData> node)
         {
             return GetSiblings(node).Count;
         }
@@ -135,7 +140,7 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>是否是叶子节点</returns>
-        public bool IsLeaf(TreeNode<T, D> node)
+        public bool IsLeaf(TreeNode<TKey, TData> node)
         {
             return node.Children.Count == 0;
         }
@@ -163,7 +168,7 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>下一个兄弟节点</returns>
-        public TreeNode<T, D> GetNextSibling(TreeNode<T, D> node)
+        public TreeNode<TKey, TData> GetNextSibling(TreeNode<TKey, TData> node)
         {
             var siblings = GetSiblings(node);
             var index = siblings.FindIndex(n => n.Id.Equals(node.Id));
@@ -175,7 +180,7 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>上一个兄弟节点</returns>
-        public TreeNode<T, D> GetPreviousSibling(TreeNode<T, D> node)
+        public TreeNode<TKey, TData> GetPreviousSibling(TreeNode<TKey, TData> node)
         {
             var siblings = GetSiblings(node);
             var index = siblings.FindIndex(n => n.Id.Equals(node.Id));
@@ -187,7 +192,7 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>首个子节点</returns>
-        public TreeNode<T, D> GetFirstChild(TreeNode<T, D> node)
+        public TreeNode<TKey, TData> GetFirstChild(TreeNode<TKey, TData> node)
         {
             return node.Children.Count > 0 ? node.Children[0] : null;
         }
@@ -197,7 +202,7 @@
         /// </summary>
         /// <param name="node">节点</param>
         /// <returns>最后一个子节点</returns>
-        public TreeNode<T, D> GetLastChild(TreeNode<T, D> node)
+        public TreeNode<TKey, TData> GetLastChild(TreeNode<TKey, TData> node)
         {
             return node.Children.Count > 0 ? node.Children[node.Children.Count - 1] : null;
         }
@@ -273,18 +278,60 @@
         {
             return _nodes.Min(n => n.Weight);
         }
+
+        /// <summary>
+        /// 根据ID获取节点
+        /// </summary>
+        /// <param name="id">节点ID</param>
+        /// <returns>找到的节点，如果不存在则返回null</returns>
+        public TreeNode<TKey, TData> GetNodeById(TKey id)
+        {
+            return _nodes.FirstOrDefault(n => n.Id.Equals(id));
+        }
+
+        /// <summary>
+        /// 根据ID获取节点及其所有子节点
+        /// </summary>
+        /// <param name="id">节点ID</param>
+        /// <returns>找到的节点（包含已填充的子孙节点），如果节点不存在则返回null</returns>
+        public List<TreeNode<TKey, TData>> GetNodeWithDescendantsById(TKey id)
+        {
+            var node = GetNodeById(id);
+            if (node == null)
+            {
+                return new List<TreeNode<TKey, TData>>();
+            }
+            return GetDescendants(node);
+        }
+
+        /// <summary>
+        /// 根据ID获取节点的所有子节点（不包含当前节点）
+        /// </summary>
+        /// <param name="id">节点ID</param>
+        /// <returns>所有子孙节点的列表，如果节点不存在则返回空列表</returns>
+        public List<TreeNode<TKey, TData>> GetDescendantsById(TKey id)
+        {
+            var node = GetNodeById(id);
+            if (node == null)
+            {
+                return new List<TreeNode<TKey, TData>>();
+            }
+            var descendants = GetDescendants(node);
+            descendants.Remove(node); // 移除当前节点
+            return descendants;
+        }
     }
 
-    public class TreeNode<T, D>
+    public class TreeNode<TKey, TData>
     {
-        public T Id { get; set; }
-        public T ParentId { get; set; }
+        public TKey Id { get; set; }
+        public TKey ParentId { get; set; }
         public string Name { get; set; }
         public int Weight { get; set; }
-        public D Data { get; set; }
-        public List<TreeNode<T, D>> Children { get; set; }
+        public TData Data { get; set; }
+        public List<TreeNode<TKey, TData>> Children { get; set; }
 
-        public TreeNode(T id, T parentId, string name, int weight, D data)
+        public TreeNode(TKey id, TKey parentId, string name, int weight, TData data)
         {
             this.Id = id;
             this.ParentId = parentId;

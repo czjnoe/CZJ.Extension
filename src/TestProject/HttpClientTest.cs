@@ -10,7 +10,7 @@ namespace TestProject
         [TestMethod]
         public void HttpSuccessTest()
         {
-            var httpHelper = new HttpClientHelper();
+            var httpHelper = new HttpClientUtil();
             var content = httpHelper.Get<string>("https://api.github.com/repos/czjnoe/CZJ.Extension/contents", new CZJ.Extension.HttpRequestOption
             {
                 Headers=new Dictionary<string, string>
@@ -24,7 +24,7 @@ namespace TestProject
         [TestMethod]
         public void HttpFailTest()
         {
-            var httpHelper = new HttpClientHelper();
+            var httpHelper = new HttpClientUtil();
             var content = httpHelper.Get<string>("https://api.github.com/repos/czjnoe/", new CZJ.Extension.HttpRequestOption
             {
                 Headers = new Dictionary<string, string>

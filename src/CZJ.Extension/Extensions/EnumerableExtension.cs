@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public static class IEnumerableExtension
+    public static class EnumerableExtension
     {
         public static bool IsEmpty(this IEnumerable? enumerable)
         {
