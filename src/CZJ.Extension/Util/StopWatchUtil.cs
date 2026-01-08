@@ -3,7 +3,7 @@
     /// <summary>
     /// 计时器工具类，提供各种计时和时间间隔计算的方法。
     /// </summary>
-    public class TimerUtil
+    public static class StopWatchUtil
     {
         /// <summary>
         /// 记录程序启动时间。

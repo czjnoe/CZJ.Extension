@@ -20,10 +20,12 @@ namespace TestProject
 
             // 读取属性
             string name = obj.GetProperty<string>("Name");
+            Assert.AreEqual("张三", name);
             int age = obj.GetProperty<int>("Age");
-
+            Assert.AreEqual(25, age);
             // 检查属性是否存在
             bool hasName = obj.HasProperty("Name");
+            Assert.IsTrue(hasName);
         }
     }
 }

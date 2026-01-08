@@ -10,8 +10,6 @@ namespace TestProject
     [TestClass]
     public sealed class CsvUtilTest
     {
-        private string path = "people.csv";
-
         [TestMethod]
         public void WriteTest()
         {
@@ -24,7 +22,7 @@ namespace TestProject
                 new Person { Name = "李四", Age = 30, Email = "lisi@example.com" }
             };
             csvHelper.Write("people.csv", people);
-
+            Assert.IsTrue(File.Exists("people.csv"));
         }
     }
 
