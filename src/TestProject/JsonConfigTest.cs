@@ -14,7 +14,7 @@ namespace TestProject
         [TestMethod]
         public void JsonTest()
         {
-            JsonConfigHelper appConfig = new JsonConfigHelper("Configs/appsettings.json");
+            JsonConfigUtil appConfig = new JsonConfigUtil("Configs/appsettings.json");
             Assert.IsTrue(appConfig.Exists());
             // 读取整个文件
             var config = appConfig.Read<AppConfigOption>();

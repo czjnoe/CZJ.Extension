@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public static class ConsoleHelper
+    public static class ConsoleUtil
     {
         private static readonly object _objLock = new();
 

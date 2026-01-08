@@ -5,6 +5,49 @@
         #region Assembly
 
         /// <summary>
+        /// 从指定目录中加载所有的 DLL 文件，并返回一个 Assembly[] 数组
+        /// </summary>
+        /// <param name="directory">要加载 DLL 文件的目录</param>
+        /// <returns>返回一个 Assembly[] 数组，数组中每个元素代表一个 DLL 程序集</returns>
+        public static Assembly[] LoadAllAssembliesFromDirectory(string directory)
+        {
+            try
+            {
+                if (!Directory.Exists(directory))
+                {
+                    throw new Exception("LoadAllDllsFromDirectory Error: Directory not exist.");
+                }
+
+                string[] dllFiles = Directory.GetFiles(directory, "*.dll");
+                if (dllFiles.Length == 0)
+                {
+                    throw new Exception("LoadAllDllsFromDirectory Error: No DLL file found.");
+                }
+
+                Assembly[] assemblies = new Assembly[dllFiles.Length];
+                for (int i = 0; i < dllFiles.Length; i++)
+                {
+                    assemblies[i] = LoadAssembly(dllFiles[i]);
+                }
+                return assemblies;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("LoadAllDllsFromDirectory Error: " + ex.Message);
+            }
+        }
+
+        /// <summary>
+        /// 根据文件路径加载 DLL 程序集，并返回一个 Assembly 对象
+        /// </summary>
+        /// <param name="dllFilePath">DLL 文件路径</param>
+        /// <returns>返回一个 Assembly 对象</returns>
+        public static Assembly LoadAssembly(string dllFilePath)
+        {
+            return Assembly.LoadFile(dllFilePath);
+        }
+
+        /// <summary>
         /// 获取当前项目引用的所有程序集
         /// </summary>
         /// <returns></returns>

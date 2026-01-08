@@ -3,7 +3,7 @@
     /// <summary>
     /// DataTable帮助类
     /// </summary>
-    public static class DataTableHelper
+    public static class DataTableUtil
     {
         /// <summary>
         /// 给DataTable增加一个自增列

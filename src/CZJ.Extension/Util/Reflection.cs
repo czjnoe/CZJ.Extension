@@ -73,11 +73,20 @@
         /// 动态创建实例
         /// </summary>
         /// <typeparam name="T">目标类型</typeparam>
-        /// <param name="type">类型</param>
         /// <param name="parameters">传递给构造函数的参数</param>        
-        public static T CreateInstance<T>(Type type, params object[] parameters)
+        public static T CreateInstance<T>(params object[] parameters)
         {
-            return ConvertHelper.To<T>(Activator.CreateInstance(type, parameters));
+            return (T)Activator.CreateInstance(typeof(T), parameters);
+        }
+
+        /// <summary>
+        /// 创建指定类型的实例
+        /// </summary>
+        /// <typeparam name="T">要创建实例的类型</typeparam>
+        /// <returns>类型的实例</returns>
+        public static T CreateInstance<T>()
+        {
+            return (T)Activator.CreateInstance(typeof(T));
         }
 
         #endregion
@@ -499,5 +508,201 @@
         }
 
         #endregion
+
+        /// <summary>
+        /// 获取类的静态属性的值
+        /// </summary>
+        /// <param name="type">要获取静态属性的类</param>
+        /// <param name="propertyName">要获取的静态属性的名称</param>
+        /// <returns>静态属性的值</returns>
+        public static object GetStaticPropertyValue(Type type, string propertyName)
+        {
+            PropertyInfo property = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public);
+            return property.GetValue(null);
+        }
+
+        /// <summary>
+        /// 设置类的静态属性的值
+        /// </summary>
+        /// <param name="type">要设置静态属性的类</param>
+        /// <param name="propertyName">要设置的静态属性的名称</param>
+        /// <param name="value">要设置的静态属性的值</param>
+        public static void SetStaticPropertyValue(Type type, string propertyName, object value)
+        {
+            PropertyInfo property = type.GetProperty(propertyName, BindingFlags.Static | BindingFlags.Public);
+            property.SetValue(null, value);
+        }
+
+        /// <summary>
+        /// 获取类的静态字段的值
+        /// </summary>
+        /// <param name="type">要获取静态字段的类</param>
+        /// <param name="fieldName">要获取的静态字段的名称</param>
+        /// <returns>静态字段的值</returns>
+        public static object GetStaticFieldValue(Type type, string fieldName)
+        {
+            FieldInfo field = type.GetField(fieldName, BindingFlags.Static | BindingFlags.Public);
+            return field.GetValue(null);
+        }
+
+        /// <summary>
+        /// 设置类的静态字段的值
+        /// </summary>
+        /// <param name="type">要设置静态字段的类</param>
+        /// <param name="fieldName">要设置的静态字段的名称</param>
+        /// <param name="value">要设置的静态字段的值</param>
+        public static void SetStaticFieldValue(Type type, string fieldName, object value)
+        {
+            FieldInfo field = type.GetField(fieldName, BindingFlags.Static | BindingFlags.Public);
+            field.SetValue(null, value);
+        }
+
+        /// <summary>
+        /// 动态调用类的静态方法
+        /// </summary>
+        /// <param name="type">要调用静态方法的类</param>
+        /// <param name="methodName">要调用的静态方法的名称</param>
+        /// <param name="arguments">要传递给静态方法的参数</param>
+        /// <returns>静态方法的返回值</returns>
+        public static object InvokeStaticMethod(Type type, string methodName, object[] arguments)
+        {
+            MethodInfo method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public);
+            return method.Invoke(null, arguments);
+        }
+
+        /// <summary>
+        /// 动态调用类的实例方法
+        /// </summary>
+        /// <param name="instance">要调用实例方法的类实例</param>
+        /// <param name="methodName">要调用的实例方法的名称</param>
+        /// <param name="arguments">要传递给实例方法的参数</param>
+        /// <returns>实例方法的返回值</returns>
+        public static object InvokeMethod(object instance, string methodName, object[] arguments)
+        {
+            Type type = instance.GetType();
+            MethodInfo method = type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public);
+            return method.Invoke(instance, arguments);
+        }
+
+        /// <summary>
+        /// 动态创建类的实例
+        /// </summary>
+        /// <param name="type">要创建实例的类</param>
+        /// <param name="constructorArguments">要传递给构造函数的参数</param>
+        /// <returns>类的新实例</returns>
+        public static object CreateInstance(Type type, params object[] constructorArguments)
+        {
+            ConstructorInfo constructor = type.GetConstructor(GetParameterTypes(constructorArguments));
+            return constructor.Invoke(constructorArguments);
+        }
+
+        /// <summary>
+        /// 获取构造函数参数类型的数组
+        /// </summary>
+        /// <param name="parameters">要获取参数类型的参数数组</param>
+        /// <returns>参数类型的数组</returns>
+        private static Type[] GetParameterTypes(object[] parameters)
+        {
+            if (parameters == null)
+            {
+                return Type.EmptyTypes;
+            }
+            Type[] parameterTypes = new Type[parameters.Length];
+            for (int i = 0; i < parameters.Length; i++)
+            {
+                if (parameters[i] == null)
+                {
+                    parameterTypes[i] = typeof(object);
+                }
+                else
+                {
+                    parameterTypes[i] = parameters[i].GetType();
+                }
+            }
+            return parameterTypes;
+        }
+
+        /// <summary>
+        /// 获取指定类型的指定类型的特性
+        /// </summary>
+        /// <typeparam name="T">特性类型</typeparam>
+        /// <param name="type">类型</param>
+        /// <returns>特性对象</returns>
+        public static T GetAttribute<T>(Type type) where T : Attribute
+        {
+            return type.GetCustomAttribute<T>();
+        }
+
+        /// <summary>
+        /// 获取指定类型的指定类型的特性数组
+        /// </summary>
+        /// <typeparam name="T">特性类型</typeparam>
+        /// <param name="type">类型</param>
+        /// <returns>特性数组</returns>
+        public static T[] GetAttributes<T>(Type type) where T : Attribute
+        {
+            return type.GetCustomAttributes<T>().ToArray();
+        }
+
+        /// <summary>
+        /// 获取类型的基类
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <returns>基类</returns>
+        public static Type GetBaseType(Type type)
+        {
+            return type.BaseType;
+        }
+
+        /// <summary>
+        /// 判断类型是否实现了某个接口
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <param name="interfaceType">接口类型</param>
+        /// <returns>是否实现</returns>
+        public static bool HasInterface(Type type, Type interfaceType)
+        {
+            return interfaceType.IsAssignableFrom(type);
+        }
+
+        /// <summary>
+        /// 获取类型的所有属性
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <returns>属性数组</returns>
+        public static PropertyInfo[] GetProperties(Type type)
+        {
+            return type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        }
+
+        /// <summary>
+        /// 获取类型的所有字段
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <returns>字段数组</returns>
+        public static FieldInfo[] GetFields(Type type)
+        {
+            return type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        }
+
+        /// <summary>
+        /// 获取类型的所有方法
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <returns>方法数组</returns>
+        public static MethodInfo[] GetMethods(Type type)
+        {
+            return type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        }
+
+        /// <summary>
+        /// 获取类型的所有事件
+        /// </summary>
+        /// <param name="type">类型</param>
+        /// <returns>事件数组</returns>
+        public static EventInfo[] GetEvents(Type type)
+        {
+            return type.GetEvents(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        }
     }
 }

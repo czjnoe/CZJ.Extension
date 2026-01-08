@@ -142,7 +142,7 @@
         {
             var start = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
             long ticks = (time - start.Add(new TimeSpan(8, 0, 0))).Ticks;
-            return ConvertHelper.ToLong(ticks / TimeSpan.TicksPerSecond);
+            return ConvertUtil.ToLong(ticks / TimeSpan.TicksPerSecond);
         }
 
         /// <summary>

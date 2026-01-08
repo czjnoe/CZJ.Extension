@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public class UrlHelper
+    public class UrlUtil
     {
         /// <summary>
         /// UrlEncode编码

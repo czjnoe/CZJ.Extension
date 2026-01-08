@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public static class AppConfigHelper
+    public static class AppConfig
     {
         public static Configuration OpenConfig(string filePath)
         {

@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public static class FileHelper
+    public static class FileUtil
     {
         public static byte[] FileToByte(string path)
         {

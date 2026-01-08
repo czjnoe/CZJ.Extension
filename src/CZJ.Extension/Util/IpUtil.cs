@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public static class IpHelper
+    public static class IpUtil
     {
         /// <summary>
         ///     获取本地IP地址详细信息
@@ -183,7 +183,7 @@
                 // 224.0.2.0 - 238.255.255.255 用户可用，全网范围
                 // 224.0.0.1 - 224.0.0.255 预留地址，最好不用
                 ip =
-                    $"{RandomExtension.GetInt(224, 238)}.{RandomExtension.GetInt(0, 255)}.{RandomExtension.GetInt(2, 255)}.{RandomExtension.GetInt(0, 255)}";
+                    $"{RandomUtil.RandomInt(224, 238)}.{RandomUtil.RandomInt(0, 255)}.{RandomUtil.RandomInt(2, 255)}.{RandomUtil.RandomInt(0, 255)}";
                 var tempPort = startPort;
 
                 var udpListeners = IPGlobalProperties.GetIPGlobalProperties().GetActiveUdpListeners();

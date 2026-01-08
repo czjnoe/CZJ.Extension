@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public static class DirectoryHelper
+    public static class DirectoryUtil
     {
         public static void CopyDirectory(string sourceDir, string targetDir, string[] filterFiles = null, bool overWrite = true)
         {

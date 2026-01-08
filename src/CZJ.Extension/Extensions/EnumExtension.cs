@@ -213,7 +213,7 @@
                 {
                     Value = e,
                     Text = e.GetDescription(),
-                    IntValue = ConvertHelper.To<int>(e),
+                    IntValue = ConvertUtil.To<int>(e),
                 })
                 .ToList();
         }

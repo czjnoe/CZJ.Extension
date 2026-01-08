@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public class ImageHelper
+    public class ImageUtil
     {
         /// <summary>
         /// 根据base64获取图片尺码

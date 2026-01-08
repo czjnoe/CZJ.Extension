@@ -3,7 +3,7 @@
     // <summary>
     /// JSON文件读写帮助类
     /// </summary>
-    public class JsonConfigHelper
+    public class JsonConfigUtil
     {
         private readonly string _filePath;
         private readonly JsonSerializerSettings _jsonSettings;
@@ -18,7 +18,7 @@
         /// </summary>
         /// <param name="filePath">JSON文件路径（支持相对路径和绝对路径）</param>
         /// <param name="settings">JSON序列化设置（可选）</param>
-        public JsonConfigHelper(string filePath, JsonSerializerSettings settings = null)
+        public JsonConfigUtil(string filePath, JsonSerializerSettings settings = null)
         {
             if (string.IsNullOrWhiteSpace(filePath))
                 throw new ArgumentException("文件路径不能为空", nameof(filePath));

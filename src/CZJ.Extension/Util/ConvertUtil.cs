@@ -3,7 +3,7 @@
     /// <summary>
     /// 类型转换
     /// </summary>
-    public static class ConvertHelper
+    public static class ConvertUtil
     {
 
         #region ToInt(转换为32位整型)
@@ -423,6 +423,23 @@
             if (string.IsNullOrEmpty(property.DisplayName) == false)
                 return property.DisplayName;
             return property.Name;
+        }
+
+        #endregion
+
+        #region  ToEnum
+
+        /// <summary>
+        /// 将字符串转换为枚举类型，转换失败返回默认值
+        /// </summary>
+        public static T ToEnum<T>(string value, T defaultValue = default(T)) where T : struct
+        {
+            T result;
+            if (Enum.TryParse(value, out result))
+            {
+                return result;
+            }
+            return defaultValue;
         }
 
         #endregion

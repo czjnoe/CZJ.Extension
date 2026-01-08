@@ -1,7 +1,69 @@
 ﻿namespace CZJ.Extension
 {
-    public static class ProcessHelper
+    public static class ProcessUtil
     {
+        /// <summary>
+        /// 通过进程名称获取进程
+        /// </summary>
+        /// <param name="processName">进程名称</param>
+        /// <returns>进程</returns>
+        public static Process GetProcessByName(string processName)
+        {
+            // 获取当前运行的所有进程
+            var processes = Process.GetProcessesByName(processName);
+            if (processes.Length > 0)
+            {
+                return processes[0];
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// 暂停进程
+        /// </summary>
+        /// <param name="process">进程</param>
+        public static void SuspendProcess(Process process)
+        {
+            foreach (ProcessThread thread in process.Threads)
+            {
+                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)thread.Id);
+                if (pOpenThread == IntPtr.Zero)
+                {
+                    break;
+                }
+                SuspendThread(pOpenThread);
+                CloseHandle(pOpenThread);
+            }
+        }
+
+        /// <summary>
+        /// 恢复进程
+        /// </summary>
+        /// <param name="process">进程</param>
+        public static void ResumeProcess(Process process)
+        {
+            foreach (ProcessThread thread in process.Threads)
+            {
+                IntPtr pOpenThread = OpenThread(ThreadAccess.SUSPEND_RESUME, false, (uint)thread.Id);
+                if (pOpenThread == IntPtr.Zero)
+                {
+                    break;
+                }
+                ResumeThread(pOpenThread);
+                CloseHandle(pOpenThread);
+            }
+        }
+
+        /// <summary>
+        /// 判断进程是否存在
+        /// </summary>
+        /// <param name="processName">进程名称</param>
+        /// <returns>是否存在</returns>
+        public static bool IsProcessExists(string processName)
+        {
+            return Process.GetProcessesByName(processName).Length > 0;
+        }
+
         /// <summary>
         /// 解除文件或目录占用
         /// </summary>
@@ -128,6 +190,26 @@
                 }
             }
         }
+
+        /// <summary>
+        /// 关闭进程
+        /// </summary>
+        /// <param name="process">进程</param>
+        public static void KillProcess(Process process)
+        {
+            process.Kill();
+        }
+
+        /// <summary>
+        /// 关闭进程并等待结束
+        /// </summary>
+        /// <param name="process">进程</param>
+        public static void KillProcessAndWait(Process process)
+        {
+            process.Kill();
+            process.WaitForExit();
+        }
+
 
         #region 打开文件夹或文件所在位置并置顶
 
@@ -266,6 +348,29 @@
         {
             var param = new ProcessStartInfo { FileName = link, UseShellExecute = true, Verb = "open" };
             Process.Start(param);
+        }
+
+        [DllImport("kernel32.dll")]
+        static extern IntPtr OpenThread(ThreadAccess dwDesiredAccess, bool bInheritHandle, uint dwThreadId);
+        [DllImport("kernel32.dll")]
+        static extern uint SuspendThread(IntPtr hThread);
+        [DllImport("kernel32.dll")]
+        static extern int ResumeThread(IntPtr hThread);
+        [DllImport("kernel32.dll")]
+        static extern IntPtr CloseHandle(IntPtr hObject);
+
+        [Flags]
+        public enum ThreadAccess : int
+        {
+            TERMINATE = (0x0001),
+            SUSPEND_RESUME = (0x0002),
+            GET_CONTEXT = (0x0008),
+            SET_CONTEXT = (0x0010),
+            SET_INFORMATION = (0x0020),
+            QUERY_INFORMATION = (0x0040),
+            SET_THREAD_TOKEN = (0x0080),
+            IMPERSONATE = (0x0100),
+            DIRECT_IMPERSONATION = (0x0200)
         }
     }
 

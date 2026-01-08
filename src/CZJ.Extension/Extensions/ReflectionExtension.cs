@@ -196,5 +196,50 @@
         {
             return GetCustomAttributes<TAttributeType>(type).FirstOrDefault();
         }
+
+
+        /// <summary>
+        /// 获取类的静态属性的值
+        /// </summary>
+        /// <param name="type">要获取静态属性的类</param>
+        /// <param name="propertyName">要获取的静态属性的名称</param>
+        /// <returns>静态属性的值</returns>
+        public static object GetStaticPropertyValue(this Type type, string propertyName) => Reflection.GetStaticPropertyValue(type, propertyName);
+
+
+        /// <summary>
+        /// 设置类的静态属性的值
+        /// </summary>
+        /// <param name="type">要设置静态属性的类</param>
+        /// <param name="propertyName">要设置的静态属性的名称</param>
+        /// <param name="value">要设置的静态属性的值</param>
+        public static void SetStaticPropertyValue(this Type type, string propertyName, object value) => Reflection.SetStaticPropertyValue(type, propertyName, value);
+
+
+        /// <summary>
+        /// 获取类的静态字段的值
+        /// </summary>
+        /// <param name="type">要获取静态字段的类</param>
+        /// <param name="fieldName">要获取的静态字段的名称</param>
+        /// <returns>静态字段的值</returns>
+        public static object GetStaticFieldValue(this Type type, string fieldName) => Reflection.GetStaticFieldValue(type, fieldName);
+
+        /// <summary>
+        /// 设置类的静态字段的值
+        /// </summary>
+        /// <param name="type">要设置静态字段的类</param>
+        /// <param name="fieldName">要设置的静态字段的名称</param>
+        /// <param name="value">要设置的静态字段的值</param>
+        public static void SetStaticFieldValue(this Type type, string fieldName, object value) => Reflection.SetStaticFieldValue(type, fieldName, value);
+
+
+        /// <summary>
+        /// 动态调用类的静态方法
+        /// </summary>
+        /// <param name="type">要调用静态方法的类</param>
+        /// <param name="methodName">要调用的静态方法的名称</param>
+        /// <param name="arguments">要传递给静态方法的参数</param>
+        /// <returns>静态方法的返回值</returns>
+        public static object InvokeStaticMethod(this Type type, string methodName, object[] arguments) => Reflection.InvokeStaticMethod(type, methodName, arguments);
     }
 }

@@ -35,10 +35,10 @@
         /// </summary>
         public static string GetEnvironmentName()
         {
-            var environment = EnvironmentHelper.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
+            var environment = RuntimeUtil.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
             if (environment.IsEmpty() == false)
                 return environment;
-            return EnvironmentHelper.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
+            return RuntimeUtil.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
         }
 
         /// <summary>
@@ -46,14 +46,14 @@
         /// </summary>
         public static void SetDevelopment()
         {
-            var environment = EnvironmentHelper.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
+            var environment = RuntimeUtil.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
             if (environment.IsEmpty() == false)
                 return;
-            environment = EnvironmentHelper.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
+            environment = RuntimeUtil.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
             if (environment.IsEmpty() == false)
                 return;
-            EnvironmentHelper.SetEnvironmentVariable(DOTNET_ENVIRONMENT, Development);
-            EnvironmentHelper.SetEnvironmentVariable(ASPNETCORE_ENVIRONMENT, Development);
+            RuntimeUtil.SetEnvironmentVariable(DOTNET_ENVIRONMENT, Development);
+            RuntimeUtil.SetEnvironmentVariable(ASPNETCORE_ENVIRONMENT, Development);
         }
 
         /// <summary>
@@ -61,10 +61,10 @@
         /// </summary>
         public static bool IsDevelopment()
         {
-            var environment = EnvironmentHelper.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
+            var environment = RuntimeUtil.GetEnvironmentVariable(DOTNET_ENVIRONMENT);
             if (environment == Development)
                 return true;
-            environment = EnvironmentHelper.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
+            environment = RuntimeUtil.GetEnvironmentVariable(ASPNETCORE_ENVIRONMENT);
             if (environment == Development)
                 return true;
             return false;

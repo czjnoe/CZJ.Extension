@@ -1,18 +1,18 @@
 ﻿namespace CZJ.Extension
 {
-    public class RetryHelper
+    public class RetryUtil
     {
         private int _delayMilliseconds;
         private int _maxAttempts;
 
-        public static RetryHelper New => new();
+        public static RetryUtil New => new();
 
         /// <summary>
         /// 重试次数
         /// </summary>
         /// <param name="maxAttempts"></param>
         /// <returns></returns>
-        public RetryHelper MaxAttempts(int maxAttempts)
+        public RetryUtil MaxAttempts(int maxAttempts)
         {
             _maxAttempts = maxAttempts;
             return this;
@@ -23,7 +23,7 @@
         /// </summary>
         /// <param name="delayMilliseconds"></param>
         /// <returns></returns>
-        public RetryHelper DelayMilliseconds(int delayMilliseconds)
+        public RetryUtil DelayMilliseconds(int delayMilliseconds)
         {
             _delayMilliseconds = delayMilliseconds;
             return this;

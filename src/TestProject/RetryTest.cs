@@ -12,7 +12,7 @@ namespace TestProject
         [TestMethod]
         public void Test()
         {
-            RetryHelper.New
+            RetryUtil.New
              .MaxAttempts(3)
              .DelayMilliseconds(1000 * 5).Execute((index) =>
              {

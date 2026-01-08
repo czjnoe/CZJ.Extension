@@ -13,7 +13,7 @@ namespace TestProject
         [TestMethod]
         public void TestAppConfigSettings()
         {
-            var appConfig = AppConfigHelper.OpenConfig(Path.Combine(Common.ApplicationBaseDirectory, "Configs/App.config"));
+            var appConfig = AppConfig.OpenConfig(Path.Combine(Common.ApplicationBaseDirectory, "Configs/App.config"));
             var flag = appConfig.TryGet<bool>("Exist", out bool value);
             Assert.IsTrue(flag);
             flag = appConfig.TryGet("Language", out string language);

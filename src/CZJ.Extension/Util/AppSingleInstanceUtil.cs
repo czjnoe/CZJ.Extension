@@ -4,7 +4,7 @@
     /// 应用程序单实例运行
     /// 当你已经打开了一个软件，再次双击图标时，它不会弹出一个新窗口，而是把新启动时的参数发给“老窗口”，并让“老窗口”跳到最前面
     /// </summary>
-    public sealed class AppSingleInstanceHelper : IDisposable
+    public sealed class AppSingleInstanceUtil : IDisposable
     {
         private readonly string _appId;
         private readonly Mutex _mutex;
@@ -23,7 +23,7 @@
         /// </summary>
         public event Action? OnActivate;
 
-        public AppSingleInstanceHelper(string appId)
+        public AppSingleInstanceUtil(string appId)
         {
             _appId = appId;
             _mutex = new Mutex(false, $"Global\\{appId}");

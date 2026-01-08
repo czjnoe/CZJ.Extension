@@ -1,6 +1,6 @@
 ﻿namespace CZJ.Extension
 {
-    public static class ZipHelper
+    public static class ZipUtil
     {
         public static void CreateZip(string sourceDirectory, string destinationZipFile)
         {
