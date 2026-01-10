@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CZJ.ConfigurationExtension\CZJ.ConfigurationExtension.csproj" />
     <ProjectReference Include="..\CZJ.Extension\CZJ.Extension.csproj" />
   </ItemGroup>
 

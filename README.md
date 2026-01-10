@@ -4,3 +4,12 @@
 [![Github](https://img.shields.io/badge/Github-active-brightgreen)](https://github.com/czjnoe/CZJ.Extension)
 
 常用扩展帮助类库
+
+
+# CZJ.ConfigurationExtension
+
+[![Nuget](https://img.shields.io/nuget/v/CZJ.ConfigurationExtension)](https://www.nuget.org/packages/CZJ.ConfigurationExtension)
+[![Github](https://img.shields.io/badge/Github-active-brightgreen)](https://github.com/czjnoe/CZJ.ConfigurationExtension)
+
+
+常用文件扩展帮助类库

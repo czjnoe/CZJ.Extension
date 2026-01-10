@@ -37,11 +37,6 @@
             return value;
         }
 
-        /// <summary>
-        ///     get master muti server (be sure that master is the first)
-        /// </summary>
-        /// <param name="conn">connnection string</param>
-        /// <returns>default master connection string</returns>
         public static string GetFirstNormalConn(this string conn)
         {
             if (string.IsNullOrEmpty(conn)) return conn;
@@ -66,11 +61,6 @@
             return singleConn;
         }
 
-        /// <summary>
-        /// </summary>
-        /// <param name="convertInfo"></param>
-        /// <param name="splitChar"></param>
-        /// <returns></returns>
         public static List<int> ConvertStringToListInt(this string convertInfo, char splitChar)
         {
             var convertList = new List<int>();

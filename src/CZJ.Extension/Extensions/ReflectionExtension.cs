@@ -58,21 +58,21 @@
         /// </summary>
         public static string GetAttributeDisplayName(this PropertyInfo property)
         {
-            // 1. 检查DisplayAttribute（System.ComponentModel.DataAnnotations）
+            // 检查DisplayAttribute（System.ComponentModel.DataAnnotations）
             var displayAttr = property.GetCustomAttribute<DisplayNameAttribute>();
             if (displayAttr != null && !string.IsNullOrWhiteSpace(displayAttr.DisplayName))
             {
                 return displayAttr.DisplayName;
             }
 
-            // 2. 检查DisplayNameAttribute（System.ComponentModel）
+            // 检查DisplayNameAttribute（System.ComponentModel）
             var displayNameAttr = property.GetCustomAttribute<DisplayNameAttribute>();
             if (displayNameAttr != null && !string.IsNullOrWhiteSpace(displayNameAttr.DisplayName))
             {
                 return displayNameAttr.DisplayName;
             }
 
-            // 3. 返回原始属性名
+            // 返回原始属性名
             return property.Name;
         }
 

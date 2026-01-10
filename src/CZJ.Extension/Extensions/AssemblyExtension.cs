@@ -48,24 +48,6 @@
         }
 
         /// <summary>
-        /// 获取当前项目引用的所有程序集
-        /// </summary>
-        /// <returns></returns>
-        public static List<Assembly> GetAllAssemblies()
-        {
-            var list = new List<Assembly>();
-            var deps = DependencyContext.Default;
-            var libs = deps.CompileLibraries.Where(lib => !lib.Serviceable && lib.Type != "package");
-            foreach (var lib in libs)
-            {
-                var assembly = AssemblyLoadContext.Default.LoadFromAssemblyName(new AssemblyName(lib.Name));
-                list.Add(assembly);
-            }
-
-            return list;
-        }
-
-        /// <summary>
         /// 获取当前应用程序域中的所有程序集
         /// </summary>
         public static IEnumerable<Assembly> GetAssemblies(this AppDomain appDomain)
