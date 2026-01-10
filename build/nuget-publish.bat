@@ -2,45 +2,45 @@
 setlocal enabledelayedexpansion
 
 :: ====================================
-:: NuGet ·¢²¼½Å±¾
+:: NuGet å‘å¸ƒè„šæœ¬
 :: ====================================
 
-:: ÅäÖÃnuget°üÄ¿Â¼ - Çë¸ù¾ÝÊµ¼ÊÇé¿öÐÞ¸Ä
+:: é…ç½®nugetåŒ…ç›®å½• - è¯·æ ¹æ®å®žé™…æƒ…å†µä¿®æ”¹
 set "PACKAGE_DIR=..\"
 set "NUGET_SOURCE=https://api.nuget.org/v3/index.json"
 
 :: ====================================
-:: Ö÷Á÷³Ì
+:: ä¸»æµç¨‹
 :: ====================================
 
 echo ========================================
-echo NuGet ·¢²¼¹¤¾ß
+echo NuGet å‘å¸ƒå·¥å…·
 echo ========================================
 echo.
 
-:: ¼ì²é°üÄ¿Â¼ÊÇ·ñ´æÔÚ
+:: æ£€æŸ¥åŒ…ç›®å½•æ˜¯å¦å­˜åœ¨
 if not exist "%PACKAGE_DIR%" (
-    echo [´íÎó] °üÄ¿Â¼²»´æÔÚ: %PACKAGE_DIR%
-    echo ÇëÏÈÔËÐÐ pack.bat ´ò°üÏîÄ¿
+    echo [é”™è¯¯] åŒ…ç›®å½•ä¸å­˜åœ¨: %PACKAGE_DIR%
+    echo è¯·å…ˆè¿è¡Œ pack.bat æ‰“åŒ…é¡¹ç›®
     pause
     exit /b 1
 )
 
-:: ¼ì²éÊÇ·ñÓÐ°üÎÄ¼þ
+:: æ£€æŸ¥æ˜¯å¦æœ‰åŒ…æ–‡ä»¶
 set "PACKAGE_COUNT=0"
 for %%f in ("%PACKAGE_DIR%\*.nupkg") do (
     set /a PACKAGE_COUNT+=1
 )
 
 if %PACKAGE_COUNT%==0 (
-    echo [´íÎó] ÔÚ %PACKAGE_DIR% Ä¿Â¼ÖÐÎ´ÕÒµ½ .nupkg ÎÄ¼þ
-    echo ÇëÏÈÔËÐÐ pack.bat ´ò°üÏîÄ¿
+    echo [é”™è¯¯] åœ¨ %PACKAGE_DIR% ç›®å½•ä¸­æœªæ‰¾åˆ° .nupkg æ–‡ä»¶
+    echo è¯·å…ˆè¿è¡Œ pack.bat æ‰“åŒ…é¡¹ç›®
     pause
     exit /b 1
 )
 
-:: ÁÐ³ö´ý·¢²¼µÄ°ü
-echo [ÐÅÏ¢] ÕÒµ½ %PACKAGE_COUNT% ¸ö°üÎÄ¼þ:
+:: åˆ—å‡ºå¾…å‘å¸ƒçš„åŒ…
+echo [ä¿¡æ¯] æ‰¾åˆ° %PACKAGE_COUNT% ä¸ªåŒ…æ–‡ä»¶:
 echo ========================================
 for %%f in ("%PACKAGE_DIR%\*.nupkg") do (
     echo   - %%~nxf
@@ -48,39 +48,39 @@ for %%f in ("%PACKAGE_DIR%\*.nupkg") do (
 echo ========================================
 echo.
 
-:: ÊäÈë API Key
-echo [²½Öè 1/2] ÇëÊäÈë NuGet API Key
+:: è¾“å…¥ API Key
+echo [æ­¥éª¤ 1/2] è¯·è¾“å…¥ NuGet API Key
 echo.
-echo ÌáÊ¾: 
-echo   1. ·ÃÎÊ https://www.nuget.org/account/apikeys »ñÈ¡ API Key
-echo   2. µÇÂ¼ÄãµÄ NuGet ÕËºÅ
-echo   3. ´´½¨ÐÂµÄ API Key »òÊ¹ÓÃÏÖÓÐµÄ
+echo æç¤º: 
+echo   1. è®¿é—® https://www.nuget.org/account/apikeys èŽ·å– API Key
+echo   2. ç™»å½•ä½ çš„ NuGet è´¦å·
+echo   3. åˆ›å»ºæ–°çš„ API Key æˆ–ä½¿ç”¨çŽ°æœ‰çš„
 echo.
-set /p API_KEY=ÇëÊäÈë API Key: 
+set /p API_KEY=è¯·è¾“å…¥ API Key: 
 
 if "%API_KEY%"=="" (
     echo.
-    echo [´íÎó] API Key ²»ÄÜÎª¿Õ
+    echo [é”™è¯¯] API Key ä¸èƒ½ä¸ºç©º
     pause
     exit /b 1
 )
 
-:: È·ÈÏ·¢²¼
+:: ç¡®è®¤å‘å¸ƒ
 echo.
-echo [²½Öè 2/2] È·ÈÏ·¢²¼
+echo [æ­¥éª¤ 2/2] ç¡®è®¤å‘å¸ƒ
 echo ========================================
-set /p CONFIRM=È·ÈÏÒª·¢²¼ÕâÐ©°üµ½ NuGet.org Âð? (Y/N): 
+set /p CONFIRM=ç¡®è®¤è¦å‘å¸ƒè¿™äº›åŒ…åˆ° NuGet.org å—? (Y/N): 
 
 if /i not "%CONFIRM%"=="Y" (
     echo.
-    echo [È¡Ïû] ÒÑÈ¡Ïû·¢²¼²Ù×÷
+    echo [å–æ¶ˆ] å·²å–æ¶ˆå‘å¸ƒæ“ä½œ
     pause
     exit /b 0
 )
 
-:: ·¢²¼ËùÓÐ°ü
+:: å‘å¸ƒæ‰€æœ‰åŒ…
 echo.
-echo [ÐÅÏ¢] ÕýÔÚ·¢²¼°üµ½ NuGet.org...
+echo [ä¿¡æ¯] æ­£åœ¨å‘å¸ƒåŒ…åˆ° NuGet.org...
 echo ========================================
 echo.
 
@@ -89,34 +89,34 @@ set "FAIL_COUNT=0"
 
 for %%f in ("%PACKAGE_DIR%\*.nupkg") do (
     set "FULL_PATH=%%~ff"
-    echo ·¢²¼: %%~nxf
-    echo Â·¾¶: !FULL_PATH!
+    echo å‘å¸ƒ: %%~nxf
+    echo è·¯å¾„: !FULL_PATH!
     dotnet nuget push "!FULL_PATH!" --api-key "%API_KEY%" --source "%NUGET_SOURCE%" --skip-duplicate
     
     if errorlevel 1 (
-        echo [Ê§°Ü] %%~nxf ·¢²¼Ê§°Ü
+        echo [å¤±è´¥] %%~nxf å‘å¸ƒå¤±è´¥
         set /a FAIL_COUNT+=1
     ) else (
-        echo [³É¹¦] %%~nxf ·¢²¼³É¹¦
+        echo [æˆåŠŸ] %%~nxf å‘å¸ƒæˆåŠŸ
         set /a SUCCESS_COUNT+=1
     )
     echo.
 )
 
-:: ÏÔÊ¾·¢²¼½á¹û
+:: æ˜¾ç¤ºå‘å¸ƒç»“æžœ
 echo ========================================
-echo [Íê³É] ·¢²¼Á÷³Ì½áÊø
+echo [å®Œæˆ] å‘å¸ƒæµç¨‹ç»“æŸ
 echo ========================================
 echo.
-echo ·¢²¼Í³¼Æ:
-echo   - ³É¹¦: %SUCCESS_COUNT% ¸ö
-echo   - Ê§°Ü: %FAIL_COUNT% ¸ö
-echo   - ×Ü¼Æ: %PACKAGE_COUNT% ¸ö
+echo å‘å¸ƒç»Ÿè®¡:
+echo   - æˆåŠŸ: %SUCCESS_COUNT% ä¸ª
+echo   - å¤±è´¥: %FAIL_COUNT% ä¸ª
+echo   - æ€»è®¡: %PACKAGE_COUNT% ä¸ª
 echo.
-echo ËµÃ÷:
-echo   - °ü·¢²¼ºó¿ÉÄÜÐèÒª¼¸·ÖÖÓ²ÅÄÜÔÚ NuGet.org ÉÏËÑË÷µ½
-echo   - ·ÃÎÊ https://www.nuget.org/packages ²é¿´ÄãµÄ°ü
-echo   - Èç¹ûÌáÊ¾°üÒÑ´æÔÚ£¬ÕâÊÇÕý³£µÄ£¨Ê¹ÓÃÁË --skip-duplicate£©
+echo è¯´æ˜Ž:
+echo   - åŒ…å‘å¸ƒåŽå¯èƒ½éœ€è¦å‡ åˆ†é’Ÿæ‰èƒ½åœ¨ NuGet.org ä¸Šæœç´¢åˆ°
+echo   - è®¿é—® https://www.nuget.org/packages æŸ¥çœ‹ä½ çš„åŒ…
+echo   - å¦‚æžœæç¤ºåŒ…å·²å­˜åœ¨ï¼Œè¿™æ˜¯æ­£å¸¸çš„ï¼ˆä½¿ç”¨äº† --skip-duplicateï¼‰
 echo.
 
 pause

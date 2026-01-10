@@ -378,6 +378,20 @@
             }
         }
 
+        // 在 ConvertUtil 类中添加
+        public static object To(object input, Type targetType)
+        {
+            if (input == null || string.IsNullOrEmpty(input.ToString())) return null;
+            try
+            {
+                return System.Convert.ChangeType(input, targetType);
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
         #endregion
 
         #region ToDictionary(对象转换为属性名值对)
