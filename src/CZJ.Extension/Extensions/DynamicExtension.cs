@@ -114,7 +114,7 @@ namespace CZJ.Extension
         /// <summary>
         /// 从字典创建 ExpandoObject
         /// </summary>
-        public static ExpandoObject FromDictionary(IDictionary<string, object> dictionary)
+        public static ExpandoObject FromDictionary(this IDictionary<string, object> dictionary)
         {
             var expando = new ExpandoObject();
             var expandoDict = (IDictionary<string, object>)expando;

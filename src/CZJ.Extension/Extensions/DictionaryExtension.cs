@@ -1,10 +1,28 @@
-﻿namespace CZJ.Extension
+﻿using System.Collections.Specialized;
+using System.Dynamic;
+
+namespace CZJ.Extension
 {
     /// <summary>
     /// 字典操作扩展
     /// </summary>
     public static class DictionaryExtension
     {
+        public static NameValueCollection ToNameValueCollection(this IDictionary<string, string> @this)
+        {
+            if (@this == null)
+            {
+                return null;
+            }
+
+            var col = new NameValueCollection();
+            foreach (var item in @this)
+            {
+                col.Add(item.Key, item.Value);
+            }
+            return col;
+        }
+
         /// <summary>
         /// 获取值
         /// </summary>
@@ -18,16 +36,24 @@
             return source.TryGetValue(key, out var obj) ? obj : defaultValue;
         }
 
-        public static void AddOrModify<TKey, TValue>(this IDictionary<TKey, TValue> dic, TKey key, TValue value)
+        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, TValue value)
         {
-            if (dic.TryGetValue(key, out _))
+            if (!@this.ContainsKey(key))
             {
-                dic[key] = value;
+                @this.Add(new KeyValuePair<TKey, TValue>(key, value));
             }
-            else
+
+            return @this[key];
+        }
+
+        public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, Func<TKey, TValue> valueFactory)
+        {
+            if (!@this.ContainsKey(key))
             {
-                dic.Add(key, value);
+                @this.Add(new KeyValuePair<TKey, TValue>(key, valueFactory(key)));
             }
+
+            return @this[key];
         }
 
         /// <summary>
@@ -66,6 +92,166 @@
             {
                 destination[pair.Key] = pair.Value;
             }
+        }
+
+        public static TValue AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, TValue value)
+        {
+            if (!@this.ContainsKey(key))
+            {
+                @this.Add(new KeyValuePair<TKey, TValue>(key, value));
+            }
+            else
+            {
+                @this[key] = value;
+            }
+
+            return @this[key];
+        }
+
+        public static TValue AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, TValue addValue, Func<TKey, TValue, TValue> updateValueFactory)
+        {
+            if (!@this.ContainsKey(key))
+            {
+                @this.Add(new KeyValuePair<TKey, TValue>(key, addValue));
+            }
+            else
+            {
+                @this[key] = updateValueFactory(key, @this[key]);
+            }
+
+            return @this[key];
+        }
+
+        public static TValue AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, Func<TKey, TValue> addValueFactory, Func<TKey, TValue, TValue> updateValueFactory)
+        {
+            if (!@this.ContainsKey(key))
+            {
+                @this.Add(new KeyValuePair<TKey, TValue>(key, addValueFactory(key)));
+            }
+            else
+            {
+                @this[key] = updateValueFactory(key, @this[key]);
+            }
+
+            return @this[key];
+        }
+
+        public static bool ContainsAllKey<TKey, TValue>(this IDictionary<TKey, TValue> @this, params TKey[] keys)
+        {
+            foreach (TKey value in keys)
+            {
+                if (!@this.ContainsKey(value))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool ContainsAnyKey<TKey, TValue>(this IDictionary<TKey, TValue> @this, params TKey[] keys)
+        {
+            foreach (TKey value in keys)
+            {
+                if (@this.ContainsKey(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public static void RemoveIfContainsKey<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key)
+        {
+            if (@this.ContainsKey(key))
+            {
+                @this.Remove(key);
+            }
+        }
+
+        public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IDictionary<TKey, TValue> @this)
+        {
+            return new SortedDictionary<TKey, TValue>(@this);
+        }
+
+        public static SortedDictionary<TKey, TValue> ToSortedDictionary<TKey, TValue>(this IDictionary<TKey, TValue> @this, IComparer<TKey> comparer)
+        {
+            return new SortedDictionary<TKey, TValue>(@this, comparer);
+        }
+
+        public static ExpandoObject ToExpando(this IDictionary<string, object> @this)
+        {
+            var expando = new ExpandoObject();
+            var expandoDict = (IDictionary<string, object>)expando;
+
+            foreach (var item in @this)
+            {
+                if (item.Value is IDictionary<string, object>)
+                {
+                    var d = (IDictionary<string, object>)item.Value;
+                    expandoDict.Add(item.Key, d.ToExpando());
+                }
+                else
+                {
+                    expandoDict.Add(item);
+                }
+            }
+
+            return expando;
+        }
+
+        public static bool AddIfNotContainsKey<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, TValue value)
+        {
+            if (!@this.ContainsKey(key))
+            {
+                @this.Add(key, value);
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool AddIfNotContainsKey<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, Func<TValue> valueFactory)
+        {
+            if (!@this.ContainsKey(key))
+            {
+                @this.Add(key, valueFactory());
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool AddIfNotContainsKey<TKey, TValue>(this IDictionary<TKey, TValue> @this, TKey key, Func<TKey, TValue> valueFactory)
+        {
+            if (!@this.ContainsKey(key))
+            {
+                @this.Add(key, valueFactory(key));
+                return true;
+            }
+
+            return false;
+        }
+
+        public static Hashtable ToHashtable(this IDictionary @this)
+        {
+            return new Hashtable(@this);
+        }
+
+        public static IDictionary<string, object> ToDictionary(this NameValueCollection @this)
+        {
+            var dict = new Dictionary<string, object>();
+
+            if (@this != null)
+            {
+                foreach (string key in @this.AllKeys)
+                {
+                    dict.Add(key, @this[key]);
+                }
+            }
+
+            return dict;
         }
     }
 }

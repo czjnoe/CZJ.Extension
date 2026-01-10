@@ -2,43 +2,34 @@
 {
     public static class EnumerableExtension
     {
-        public static bool IsEmpty(this IEnumerable? enumerable)
+        public static bool IsNotEmpty<T>(this IEnumerable<T> @this)
         {
-            switch (enumerable)
-            {
-                case null:
-                    return true;
-                case ICollection collection:
-                    return collection.Count == 0;
-                default:
-                    {
-                        var enumerator = enumerable.GetEnumerator();
-                        try
-                        {
-                            return !enumerator.MoveNext();
-                        }
-                        finally
-                        {
-                            if (enumerator is IDisposable disposable)
-                            {
-                                disposable.Dispose();
-                            }
-                        }
-                    }
-            }
+            return @this.Any();
         }
 
-        public static bool IsNotEmpty(this IEnumerable? enumerable) => !IsEmpty(enumerable);
-
-        /// <summary>
-        /// 是否为空
-        /// </summary>
-        /// <param name="value">值</param>
-        public static bool IsEmpty<T>(this IEnumerable<T>? value)
+        public static bool IsEmpty<T>(this IEnumerable<T> @this)
         {
-            if (value == null)
-                return true;
-            return !value.Any();
+            return !@this.Any();
+        }
+
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> @this)
+        {
+            return @this == null || !@this.Any();
+        }
+
+        public static bool IsNotNullOrEmpty<T>(this IEnumerable<T> @this)
+        {
+            return @this != null && @this.Any();
+        }
+
+        public static string StringJoin<T>(this IEnumerable<T> @this, string separator)
+        {
+            return string.Join(separator, @this);
+        }
+
+        public static string StringJoin<T>(this IEnumerable<T> @this, char separator)
+        {
+            return string.Join(separator.ToString(), @this);
         }
 
         /// <summary>
@@ -179,34 +170,6 @@
         /// <typeparam name="T"></typeparam>
         /// <param name="this"></param>
         /// <param name="values"></param>
-        public static void AddRange<T>(this ICollection<T> @this, params T[] values)
-        {
-            foreach (var obj in values)
-            {
-                @this.Add(obj);
-            }
-        }
-
-        /// <summary>
-        /// 添加多个元素
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="this"></param>
-        /// <param name="values"></param>
-        public static void AddRange<T>(this ICollection<T> @this, IEnumerable<T> values)
-        {
-            foreach (var obj in values)
-            {
-                @this.Add(obj);
-            }
-        }
-
-        /// <summary>
-        /// 添加多个元素
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="this"></param>
-        /// <param name="values"></param>
         public static void AddRange<T>(this ConcurrentBag<T> @this, params T[] values)
         {
             foreach (var obj in values)
@@ -226,24 +189,6 @@
             foreach (var obj in values)
             {
                 @this.Enqueue(obj);
-            }
-        }
-
-        /// <summary>
-        /// 添加符合条件的多个元素
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="this"></param>
-        /// <param name="predicate"></param>
-        /// <param name="values"></param>
-        public static void AddRangeIf<T>(this ICollection<T> @this, Func<T, bool> predicate, params T[] values)
-        {
-            foreach (var obj in values)
-            {
-                if (predicate(obj))
-                {
-                    @this.Add(obj);
-                }
             }
         }
 
@@ -280,37 +225,6 @@
                 {
                     @this.Enqueue(obj);
                 }
-            }
-        }
-
-        /// <summary>
-        /// 添加不重复的元素
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="this"></param>
-        /// <param name="values"></param>
-        public static void AddRangeIfNotContains<T>(this ICollection<T> @this, params T[] values)
-        {
-            foreach (T obj in values)
-            {
-                if (!@this.Contains(obj))
-                {
-                    @this.Add(obj);
-                }
-            }
-        }
-
-        /// <summary>
-        /// 移除符合条件的元素
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="this"></param>
-        /// <param name="where"></param>
-        public static void RemoveWhere<T>(this ICollection<T> @this, Func<T, bool> @where)
-        {
-            foreach (var obj in @this.Where(where).ToList())
-            {
-                @this.Remove(obj);
             }
         }
 
@@ -894,6 +808,34 @@
         public static IEnumerable<T> WhereIf<T>(this IEnumerable<T> source, bool condition, Func<T, bool> predicate)
         {
             return condition ? source.Where(predicate) : source;
+        }
+
+        public static bool ContainsAll<T>(this IEnumerable<T> @this, params T[] values)
+        {
+            T[] list = @this.ToArray();
+            foreach (T value in values)
+            {
+                if (!list.Contains(value))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool ContainsAny<T>(this IEnumerable<T> @this, params T[] values)
+        {
+            T[] list = @this.ToArray();
+            foreach (T value in values)
+            {
+                if (list.Contains(value))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

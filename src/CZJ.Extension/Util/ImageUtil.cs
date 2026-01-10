@@ -2,6 +2,14 @@
 {
     public class ImageUtil
     {
+        public static Image ToImage(byte[] @this)
+        {
+            using (var ms = new MemoryStream(@this))
+            {
+                return Image.FromStream(ms);
+            }
+        }
+
         /// <summary>
         /// 根据base64获取图片尺码
         /// </summary>
