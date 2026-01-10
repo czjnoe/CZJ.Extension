@@ -351,7 +351,7 @@
         /// </summary>
         /// <typeparam name="T">目标类型</typeparam>
         /// <param name="input">输入值</param>
-        public static T To<T>(object input)
+        public static T To<T>(object input, T defaultValue = default)
         {
             if (input == null)
                 return default;
@@ -374,14 +374,15 @@
             }
             catch
             {
-                return default;
+                return defaultValue;
             }
         }
 
         // 在 ConvertUtil 类中添加
         public static object To(object input, Type targetType)
         {
-            if (input == null || string.IsNullOrEmpty(input.ToString())) return null;
+            if (input == null || string.IsNullOrEmpty(input.ToString())) 
+                return null;
             try
             {
                 return System.Convert.ChangeType(input, targetType);
