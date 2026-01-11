@@ -155,5 +155,29 @@
         /// 获取当前应用程序基路径
         /// </summary>
         public static string ApplicationBaseDirectory => AppContext.BaseDirectory;
+
+        public static string Version { get; } = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown";
+
+        public static string Platform { get; } = RuntimeInformation.RuntimeIdentifier ?? "Unknown";
+
+        public static string Framework { get; } = RuntimeInformation.FrameworkDescription ?? "Unknown";
+
+        public static string BuildDate { get; } = File.GetLastWriteTime(Assembly.GetExecutingAssembly().Location).ToString("yyyy-MM-dd");
+
+        public static string OSString => $"{OS} {Environment.OSVersion.Version}";
+
+        private static string OS
+        {
+            get
+            {
+                if (OperatingSystem.IsWindows())
+                    return "Windows";
+                if (OperatingSystem.IsMacOS())
+                    return "macOS";
+                if (OperatingSystem.IsLinux())
+                    return "Linux";
+                return "Unknown";
+            }
+        }
     }
 }
