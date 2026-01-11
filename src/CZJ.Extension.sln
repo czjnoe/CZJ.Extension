@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CZJ.ConfigurationExtension", "CZJ.ConfigurationExtension\CZJ.ConfigurationExtension.csproj", "{A574DE90-86BC-47FF-BA02-79CE79747A42}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CZJ.ImageExtension", "CZJ.ImageExtension\CZJ.ImageExtension.csproj", "{FB56781C-4C58-4C9D-AF20-4332C64AC2F1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{A574DE90-86BC-47FF-BA02-79CE79747A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A574DE90-86BC-47FF-BA02-79CE79747A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A574DE90-86BC-47FF-BA02-79CE79747A42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB56781C-4C58-4C9D-AF20-4332C64AC2F1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB56781C-4C58-4C9D-AF20-4332C64AC2F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB56781C-4C58-4C9D-AF20-4332C64AC2F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB56781C-4C58-4C9D-AF20-4332C64AC2F1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,6 +64,7 @@ Global
 		{8136E692-A94C-4475-91D3-F7A0D13AE91E} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{BB3F4DF2-D007-4D41-BD72-9B7A09B63B45} = {01818D82-82B8-4593-AE26-773CD9DDB282}
 		{A574DE90-86BC-47FF-BA02-79CE79747A42} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{FB56781C-4C58-4C9D-AF20-4332C64AC2F1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9D1D61E-510F-42AD-934A-B5A243950948}

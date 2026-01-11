@@ -13,3 +13,12 @@
 
 
 常用文件扩展帮助类库
+
+
+# CZJ.ImageExtension
+
+[![Nuget](https://img.shields.io/nuget/v/CZJ.ImageExtension)](https://www.nuget.org/packages/CZJ.ImageExtension)
+[![Github](https://img.shields.io/badge/Github-active-brightgreen)](https://github.com/czjnoe/CZJ.ImageExtension)
+
+
+常用图像扩展帮助类库

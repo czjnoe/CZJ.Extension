@@ -1,4 +1,4 @@
-﻿namespace CZJ.ConfigurationExtension
+﻿namespace CZJ.Extension
 {
     public static class AppSettingsConfig
     {
