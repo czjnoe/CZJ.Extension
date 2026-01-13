@@ -164,6 +164,250 @@
 
         #endregion
 
+        #region 流式请求
+
+        /// <summary>
+        /// GET 流式请求（逐行读取）
+        /// </summary>
+        /// <param name="url">请求地址</param>
+        /// <param name="onDataReceived">每接收到一行数据时的回调</param>
+        /// <param name="options">请求配置</param>
+        /// <param name="cancellationToken">取消令牌</param>
+        public async Task<HttpStreamResult> GetStreamAsync(
+            string url,
+            Action<string> onDataReceived,
+            HttpRequestOption options = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendStreamRequestAsync(HttpMethod.Get, url, null, onDataReceived, options, cancellationToken);
+        }
+
+        /// <summary>
+        /// POST 流式请求（逐行读取）
+        /// </summary>
+        public async Task<HttpStreamResult> PostStreamAsync<TRequest>(
+            string url,
+            TRequest data,
+            Action<string> onDataReceived,
+            HttpRequestOption options = null,
+            CancellationToken cancellationToken = default)
+        {
+            return await SendStreamRequestAsync(HttpMethod.Post, url, data, onDataReceived, options, cancellationToken);
+        }
+
+        /// <summary>
+        /// GET 流式请求（返回 IAsyncEnumerable）
+        /// </summary>
+        public async IAsyncEnumerable<string> GetStreamAsyncEnumerable(
+            string url,
+            HttpRequestOption options = null,
+            [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            await foreach (var line in SendStreamAsyncEnumerable(HttpMethod.Get, url, null, options, cancellationToken))
+            {
+                yield return line;
+            }
+        }
+
+        /// <summary>
+        /// POST 流式请求（返回 IAsyncEnumerable）
+        /// </summary>
+        public async IAsyncEnumerable<string> PostStreamAsyncEnumerable<TRequest>(
+            string url,
+            TRequest data,
+            HttpRequestOption options = null,
+            [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken = default)
+        {
+            await foreach (var line in SendStreamAsyncEnumerable(HttpMethod.Post, url, data, options, cancellationToken))
+            {
+                yield return line;
+            }
+        }
+
+        /// <summary>
+        /// 下载文件流到本地
+        /// </summary>
+        public async Task<HttpStreamResult> DownloadFileAsync(
+            string url,
+            string localFilePath,
+            Action<long, long> onProgressChanged = null,
+            HttpRequestOption options = null,
+            CancellationToken cancellationToken = default)
+        {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            options ??= new HttpRequestOption();
+
+            var result = new HttpStreamResult
+            {
+                Success = false
+            };
+
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                ConfigureHttpClient(client, options);
+
+                using var request = CreateHttpRequestMessage(HttpMethod.Get, url, null, options);
+                using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+                result.StatusCode = response.StatusCode;
+                result.Headers = response.Headers;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    result.ErrorMessage = $"HTTP {(int)response.StatusCode}: {response.ReasonPhrase}";
+                    return result;
+                }
+
+                var totalBytes = response.Content.Headers.ContentLength ?? 0;
+                var downloadedBytes = 0L;
+
+                using var contentStream = await response.Content.ReadAsStreamAsync(cancellationToken);
+                using var fileStream = new FileStream(localFilePath, FileMode.Create, FileAccess.Write, FileShare.None, 8192, true);
+
+                var buffer = new byte[8192];
+                int bytesRead;
+
+                while ((bytesRead = await contentStream.ReadAsync(buffer, 0, buffer.Length, cancellationToken)) > 0)
+                {
+                    await fileStream.WriteAsync(buffer, 0, bytesRead, cancellationToken);
+                    downloadedBytes += bytesRead;
+
+                    onProgressChanged?.Invoke(downloadedBytes, totalBytes);
+                }
+
+                stopwatch.Stop();
+                result.Success = true;
+                result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                result.TotalBytesReceived = downloadedBytes;
+            }
+            catch (TaskCanceledException ex)
+            {
+                stopwatch.Stop();
+                result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                result.ErrorMessage = ex.CancellationToken.IsCancellationRequested
+                    ? "Download was cancelled"
+                    : "Download timeout";
+            }
+            catch (Exception ex)
+            {
+                stopwatch.Stop();
+                result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                result.ErrorMessage = $"Download error: {ex.Message}";
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 发送流式请求（使用回调）
+        /// </summary>
+        private async Task<HttpStreamResult> SendStreamRequestAsync(
+            HttpMethod method,
+            string url,
+            object data,
+            Action<string> onDataReceived,
+            HttpRequestOption options,
+            CancellationToken cancellationToken)
+        {
+            var stopwatch = System.Diagnostics.Stopwatch.StartNew();
+            options ??= new HttpRequestOption();
+
+            var result = new HttpStreamResult
+            {
+                Success = false
+            };
+
+            try
+            {
+                var client = _httpClientFactory.CreateClient();
+                ConfigureHttpClient(client, options);
+
+                using var request = CreateHttpRequestMessage(method, url, data, options);
+                using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+                result.StatusCode = response.StatusCode;
+                result.Headers = response.Headers;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    result.ErrorMessage = $"HTTP {(int)response.StatusCode}: {response.ReasonPhrase}";
+                    return result;
+                }
+
+                using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+                using var reader = new StreamReader(stream, options.Encoding);
+
+                var lineCount = 0;
+                string line;
+
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                        break;
+
+                    lineCount++;
+                    onDataReceived?.Invoke(line);
+                }
+
+                stopwatch.Stop();
+                result.Success = true;
+                result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                result.LinesReceived = lineCount;
+            }
+            catch (TaskCanceledException ex)
+            {
+                stopwatch.Stop();
+                result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                result.ErrorMessage = ex.CancellationToken.IsCancellationRequested
+                    ? "Stream was cancelled"
+                    : "Stream timeout";
+            }
+            catch (Exception ex)
+            {
+                stopwatch.Stop();
+                result.ElapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                result.ErrorMessage = $"Stream error: {ex.Message}";
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 发送流式请求（返回 IAsyncEnumerable）
+        /// </summary>
+        private async IAsyncEnumerable<string> SendStreamAsyncEnumerable(
+            HttpMethod method,
+            string url,
+            object data,
+            HttpRequestOption options,
+            [System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            options ??= new HttpRequestOption();
+
+            var client = _httpClientFactory.CreateClient();
+            ConfigureHttpClient(client, options);
+
+            using var request = CreateHttpRequestMessage(method, url, data, options);
+            using var response = await client.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken);
+
+            response.EnsureSuccessStatusCode();
+
+            using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
+            using var reader = new StreamReader(stream, options.Encoding);
+
+            string line;
+            while ((line = await reader.ReadLineAsync()) != null)
+            {
+                if (cancellationToken.IsCancellationRequested)
+                    yield break;
+
+                yield return line;
+            }
+        }
+
+        #endregion
+
         #region 核心请求方法
 
         /// <summary>
@@ -188,16 +432,10 @@
 
             try
             {
-                // 从工厂获取 HttpClient 实例
                 client = _httpClientFactory.CreateClient();
-
-                // 配置 HttpClient
                 ConfigureHttpClient(client, options);
 
-                // 创建请求消息
                 using var request = CreateHttpRequestMessage(method, url, data, options);
-
-                // 发送请求
                 using var response = await client.SendAsync(request, cancellationToken);
 
                 stopwatch.Stop();
@@ -205,16 +443,13 @@
                 result.StatusCode = response.StatusCode;
                 result.Headers = response.Headers;
 
-                // 读取响应内容
                 var content = await response.Content.ReadAsStringAsync(cancellationToken);
                 result.RawContent = content;
 
-                // 判断请求是否成功
                 if (response.IsSuccessStatusCode)
                 {
                     result.Success = true;
 
-                    // 反序列化响应数据
                     if (typeof(TResponse) == typeof(string))
                     {
                         result.Data = (TResponse)(object)content;
@@ -260,14 +495,12 @@
         {
             client.Timeout = TimeSpan.FromSeconds(options.TimeoutSeconds);
 
-            // 设置 Bearer Token
             if (!string.IsNullOrWhiteSpace(options.BearerToken))
             {
                 client.DefaultRequestHeaders.Authorization =
                     new AuthenticationHeaderValue("Bearer", options.BearerToken);
             }
 
-            // 设置基础认证
             if (!string.IsNullOrWhiteSpace(options.BasicAuthUsername))
             {
                 var credentials = Convert.ToBase64String(
@@ -288,7 +521,6 @@
         {
             var request = new HttpRequestMessage(method, url);
 
-            // 添加自定义请求头
             if (options.Headers != null)
             {
                 foreach (var header in options.Headers)
@@ -297,7 +529,6 @@
                 }
             }
 
-            // 设置请求内容
             if (data != null && (method == HttpMethod.Post || method == HttpMethod.Put || method == HttpMethod.Patch))
             {
                 if (options.ContentType.Contains("form-urlencoded") && data is Dictionary<string, string> formData)
@@ -340,9 +571,6 @@
         }
     }
 
-    /// <summary>
-    /// HTTP 请求配置选项
-    /// </summary>
     public class HttpRequestOption
     {
         /// <summary>
@@ -440,5 +668,19 @@
         /// 请求耗时（毫秒）
         /// </summary>
         public long ElapsedMilliseconds { get; set; }
+    }
+
+    /// <summary>
+    /// HTTP 流式响应结果
+    /// </summary>
+    public class HttpStreamResult
+    {
+        public bool Success { get; set; }
+        public HttpStatusCode StatusCode { get; set; }
+        public string ErrorMessage { get; set; }
+        public HttpResponseHeaders Headers { get; set; }
+        public long ElapsedMilliseconds { get; set; }
+        public int LinesReceived { get; set; }
+        public long TotalBytesReceived { get; set; }
     }
 }
