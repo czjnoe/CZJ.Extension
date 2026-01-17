@@ -7,3 +7,6 @@ global using System.IO;
 global using System.Linq;
 global using System.Data;
 global using System.Dynamic;
+global using NPOI.HSSF.UserModel;
+global using NPOI.SS.UserModel;
+global using NPOI.XSSF.UserModel;
