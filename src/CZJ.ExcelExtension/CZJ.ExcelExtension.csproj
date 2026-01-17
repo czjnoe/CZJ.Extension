@@ -46,6 +46,7 @@
     <!-- None 表示这一项要显示到 Visual Studio 解决方案中（其实对于不认识的文件，None 就是默认值）；Include 表示相对于项目文件的路径（支持通配符）；Pack 表示这一项要打包到 NuGet；PackagePath 表示这一项打包到 NuGet 中的路径 -->
     <ItemGroup>
         <None Include="..\..\README.md" Pack="True" PackagePath="" />
+        <None Include="Extensions\EPPlusExtension.cs" />
     </ItemGroup>
 
     <ItemGroup>

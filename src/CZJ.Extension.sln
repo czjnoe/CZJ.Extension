@@ -38,6 +38,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CZJ.ExcelExtension", "CZJ.E
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CZJ.ExcelExtensionTest", "CZJ.ExcelExtensionTest\CZJ.ExcelExtensionTest.csproj", "{36488DA4-D325-4E35-8B5E-D72822468DC1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CZJ.ImageExtensionTest", "CZJ.ImageExtensionTest\CZJ.ImageExtensionTest.csproj", "{53568F64-139E-4AD9-9235-7BE90FF314E0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,6 +70,10 @@ Global
 		{36488DA4-D325-4E35-8B5E-D72822468DC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36488DA4-D325-4E35-8B5E-D72822468DC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36488DA4-D325-4E35-8B5E-D72822468DC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53568F64-139E-4AD9-9235-7BE90FF314E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53568F64-139E-4AD9-9235-7BE90FF314E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53568F64-139E-4AD9-9235-7BE90FF314E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53568F64-139E-4AD9-9235-7BE90FF314E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,6 +85,7 @@ Global
 		{FB56781C-4C58-4C9D-AF20-4332C64AC2F1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{88EB5473-6E23-4FCB-8E07-2A3380ECECC1} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{36488DA4-D325-4E35-8B5E-D72822468DC1} = {01818D82-82B8-4593-AE26-773CD9DDB282}
+		{53568F64-139E-4AD9-9235-7BE90FF314E0} = {01818D82-82B8-4593-AE26-773CD9DDB282}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E9D1D61E-510F-42AD-934A-B5A243950948}

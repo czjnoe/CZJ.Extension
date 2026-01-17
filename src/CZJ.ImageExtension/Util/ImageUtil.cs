@@ -2,11 +2,11 @@
 {
     public class ImageUtil
     {
-        public static Image ToImage(byte[] @this)
+        public static System.Drawing.Image ToImage(byte[] @this)
         {
             using (var ms = new MemoryStream(@this))
             {
-                return Image.FromStream(ms);
+                return System.Drawing.Image.FromStream(ms);
             }
         }
 
@@ -21,14 +21,14 @@
                 return new System.Drawing.Size(0, 0);
             using (MemoryStream memoryStream = new MemoryStream(imageBytes, 0, imageBytes.Length))
             {
-                using (Image image = Image.FromStream(memoryStream))
+                using (System.Drawing.Image image = System.Drawing.Image.FromStream(memoryStream))
                 {
-                    return new Size(image.Width, image.Height);
+                    return new System.Drawing.Size(image.Width, image.Height);
                 }
             }
         }
 
-        public static Bitmap CaptureRegion(byte[] ImageByte, Rectangle region)
+        public static Bitmap CaptureRegion(byte[] ImageByte, System.Drawing.Rectangle region)
         {
             // 加载原始图像
             using (var originalBitmap = ByteToBitmap(ImageByte))
@@ -44,7 +44,7 @@
             Bitmap bitmap = null;
             using (MemoryStream stream = new MemoryStream(ImageByte))
             {
-                bitmap = new Bitmap((Image)new Bitmap(stream));
+                bitmap = new Bitmap((System.Drawing.Image)new Bitmap(stream));
             }
             return bitmap;
         }
@@ -72,7 +72,7 @@
         {
             // 确保输入流位于开始位置
             imageStream.Seek(0, SeekOrigin.Begin);
-            using (Image tiffImage = Image.FromStream(imageStream))
+            using (System.Drawing.Image tiffImage = System.Drawing.Image.FromStream(imageStream))
             {
                 // 创建一个新的Bitmap对象，尺寸与原图相同
                 using (Bitmap bitmap = new Bitmap(tiffImage.Width, tiffImage.Height))

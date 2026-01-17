@@ -228,7 +228,7 @@
             return package.GetAsByteArray();
         }
 
-        public static void SaveStreamToFile(this MemoryStream stream, string filePath)
+        public static void SaveStreamToFile(MemoryStream stream, string filePath)
         {
             stream.Position = 0;
 
@@ -251,7 +251,7 @@
         /// </summary>
         /// <param name="sheet"></param>
         /// <param name="count"></param>
-        public static void AddEmptyRows(this ExcelWorksheet sheet, int count)
+        public static void AddEmptyRows(ExcelWorksheet sheet, int count)
         {
             int startRow = sheet.Dimension?.End.Row + 1 ?? 1;
 
@@ -265,7 +265,7 @@
         /// 追加一行
         /// </summary>
         /// <param name="sheet"></param>
-        public static void AddEmptyRow(this ExcelWorksheet sheet)
+        public static void AddEmptyRow(ExcelWorksheet sheet)
         {
             sheet.AddEmptyRows(1);
         }
@@ -276,7 +276,7 @@
         /// <param name="sheet"></param>
         /// <param name="rowIndex"></param>
         /// <param name="count"></param>
-        public static void InsertEmptyRows(this ExcelWorksheet sheet, int rowIndex, int count)
+        public static void InsertEmptyRows(ExcelWorksheet sheet, int rowIndex, int count)
         {
             sheet.InsertRow(rowIndex, count);
         }
@@ -441,7 +441,7 @@
             return newPkg.GetAsByteArray();
         }
 
-        public static DataTable ToDataTable(this ExcelWorksheet sheet)
+        public static DataTable ToDataTable(ExcelWorksheet sheet)
         {
             var dt = new DataTable(sheet.Name);
 
@@ -550,7 +550,7 @@
         /// <summary>
         /// 保存 ExcelPackage 到文件
         /// </summary>
-        public static void SaveAsFile(this ExcelPackage package, string filePath)
+        public static void SaveAsFile(ExcelPackage package, string filePath)
         {
             var file = new FileInfo(filePath);
             package.SaveAs(file);
@@ -559,7 +559,7 @@
         /// <summary>
         /// 获取或创建 Sheet
         /// </summary>
-        public static ExcelWorksheet GetOrCreateSheet(this ExcelPackage package, string sheetName)
+        public static ExcelWorksheet GetOrCreateSheet(ExcelPackage package, string sheetName)
         {
             var sheet = package.Workbook.Worksheets.FirstOrDefault(s => s.Name == sheetName)
                         ?? package.Workbook.Worksheets.Add(sheetName);
