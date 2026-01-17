@@ -1,4 +1,4 @@
-﻿namespace CZJ.Extension
+﻿namespace CZJ.ImageExtension
 {
     public class ImageUtil
     {

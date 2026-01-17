@@ -1,4 +1,4 @@
-﻿namespace CZJ.Extension
+﻿namespace CZJ.ConfigurationExtension
 {
     /// <summary>
     /// YAML配置文件帮助类
