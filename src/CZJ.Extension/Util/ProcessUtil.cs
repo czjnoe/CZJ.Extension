@@ -3,6 +3,94 @@
     public static class ProcessUtil
     {
         /// <summary>
+        /// 打开 exe 程序
+        /// </summary>
+        /// <param name="exePath">exe 文件的完整路径</param>
+        /// <param name="arguments">启动参数（可选）</param>
+        /// <returns>启动的进程对象，失败返回 null</returns>
+        public static Process StartProcess(string exePath, string arguments = "")
+        {
+            try
+            {
+                if (!File.Exists(exePath))
+                {
+                    throw new FileNotFoundException($"未找到文件: {exePath}");
+                }
+
+                ProcessStartInfo startInfo = new ProcessStartInfo
+                {
+                    FileName = exePath,
+                    Arguments = arguments,
+                    UseShellExecute = true
+                };
+
+                Process process = Process.Start(startInfo);
+                return process;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"启动进程失败: {ex.Message}");
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// 判断指定路径的程序是否正在运行
+        /// </summary>
+        /// <param name="exePath">exe 文件的完整路径</param>
+        /// <returns>如果进程正在运行返回 true，否则返回 false</returns>
+        public static bool IsProcessRunningByPath(string exePath)
+        {
+            try
+            {
+                string fullPath = Path.GetFullPath(exePath);
+
+                Process[] processes = Process.GetProcesses();
+                return processes.Any(p =>
+                {
+                    try
+                    {
+                        return string.Equals(
+                            p.MainModule?.FileName,
+                            fullPath,
+                            StringComparison.OrdinalIgnoreCase);
+                    }
+                    catch
+                    {
+                        // 某些系统进程可能无法访问
+                        return false;
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"检查进程路径失败: {ex.Message}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 如果进程未运行则启动，如果已运行则返回现有进程
+        /// </summary>
+        /// <param name="exePath">exe 文件路径</param>
+        /// <param name="arguments">启动参数</param>
+        /// <returns>进程对象</returns>
+        public static Process StartOrGetExisting(string exePath, string arguments = "")
+        {
+            string processName = Path.GetFileNameWithoutExtension(exePath);
+
+            if (IsProcessExists(processName))
+            {
+                var existingProcesses = GetProcesses(processName);
+                return existingProcesses.FirstOrDefault();
+            }
+            else
+            {
+                return StartProcess(exePath, arguments);
+            }
+        }
+
+        /// <summary>
         /// 通过进程名称获取进程
         /// </summary>
         /// <param name="processName">进程名称</param>
