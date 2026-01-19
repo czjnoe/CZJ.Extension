@@ -12,7 +12,7 @@
         <!--  NuGet 包源中唯一标识你的包的字符串，只能包含字母、数字、点号(.)、连字符(-) -->
         <PackageId>CZJ.ConfigurationExtension</PackageId>
         <!-- 版本Id -->
-        <Version>1.4.0</Version>
+        <Version>1.4.1</Version>
         <!-- 作者的 Id，如果要发布到 nuget.org，那么这里就是 NuGet 用户 Id。 -->
         <Authors>CZJ</Authors>
         <Company>CZJ</Company>
@@ -49,14 +49,14 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="10.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.2" />
         <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
-        <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.1" />
+        <PackageReference Include="System.Configuration.ConfigurationManager" Version="10.0.2" />
         <PackageReference Include="YamlDotNet" Version="16.3.0" />
     </ItemGroup>
 
