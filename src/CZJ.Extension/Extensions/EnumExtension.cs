@@ -97,7 +97,7 @@
         {
             Enum enumModel = Enum.Parse(typeof(T), itemValue.ToString()) as Enum;
             var attr = GetEnumAttribute(enumModel, typeof(DescriptionAttribute));
-            return (attr as DescriptionAttribute)?.Description ?? defaultValue;
+            return (attr as DescriptionAttribute)?.Description ?? (string.IsNullOrWhiteSpace(defaultValue) ? enumModel.ToString() : defaultValue);
         }
 
         /// <summary>
