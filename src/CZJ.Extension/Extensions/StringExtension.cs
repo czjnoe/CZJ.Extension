@@ -2,6 +2,13 @@
 {
     public static class StringExtension
     {
+        public static string ToFormat(this string @this, params object[] args)
+        {
+            if (string.IsNullOrEmpty(@this))
+                return @this;
+            return string.Format(@this, args);
+        }
+        
         public static string ToSnakeCase(this string input)
         {
             if (string.IsNullOrEmpty(input)) return input;
