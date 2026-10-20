@@ -72,5 +72,37 @@
             catch { }
             return false;
         }
+
+        public static string CompressJson(this string json, bool ignoreInvalidJson = false)
+        {
+            if (string.IsNullOrWhiteSpace(json))
+            {
+                return json;
+            }
+
+            try
+            {
+                using var stringReader = new StringReader(json);
+                using var jsonReader = new JsonTextReader(stringReader)
+                {
+                    DateParseHandling = DateParseHandling.None,
+                    FloatParseHandling = FloatParseHandling.Decimal
+                };
+
+                var sb = new StringBuilder(json.Length);
+                using var stringWriter = new StringWriter(sb);
+                using var jsonWriter = new JsonTextWriter(stringWriter)
+                {
+                    Formatting = Formatting.None
+                };
+
+                jsonWriter.WriteToken(jsonReader);
+                return sb.ToString();
+            }
+            catch (JsonException) when (ignoreInvalidJson)
+            {
+                return json;
+            }
+        }
     }
 }
