@@ -157,14 +157,35 @@
         }
 
         /// <summary>
-        /// 将 Timestamp 转换为本地 DateTime（精确到毫秒）
+        /// 将 Unix 纳秒时间戳转换为本地 DateTime（精确到毫秒）
         /// </summary>
-        public static DateTime? ToLocalDateTime(this Timestamp timestamp)
+        /// <param name="nanoseconds">自 1970-01-01T00:00:00Z 以来的纳秒数</param>
+        public static DateTime ToLocalDateTimeFromNanoseconds(this long nanoseconds)
         {
-            if (!timestamp.IsValid)
+            long milliseconds = nanoseconds / 1_000_000;
+            return DateTimeOffset.FromUnixTimeMilliseconds(milliseconds).LocalDateTime;
+        }
+
+        /// <summary>
+        /// 将可空 Unix 纳秒时间戳转换为本地 DateTime?（无效或越界时返回 null）
+        /// </summary>
+        public static DateTime? ToLocalDateTimeFromNanoseconds(this long? nanoseconds)
+        {
+            if (!nanoseconds.HasValue || nanoseconds.Value <= 0)
                 return null;
 
-            long milliseconds = timestamp.NanosecondsSinceUnixEpoch / 1_000_000;
+            long milliseconds = nanoseconds.Value / 1_000_000;
+            if (milliseconds < -62135596800000 || milliseconds > 253402300799999)
+                return null;
+            return DateTimeOffset.FromUnixTimeMilliseconds(milliseconds).LocalDateTime;
+        }
+
+        /// <summary>
+        /// 将标准的 Unix 毫秒时间戳转换为本地 DateTime
+        /// </summary>
+        /// <param name="milliseconds">自 1970-01-01T00:00:00Z 以来的毫秒数</param>
+        public static DateTime ToLocalDateTimeFromMilliseconds(this long milliseconds)
+        {
             return DateTimeOffset.FromUnixTimeMilliseconds(milliseconds).LocalDateTime;
         }
 
