@@ -111,17 +111,17 @@
 
         public static bool IsValidationDateTime(this DateTime? dateTime)
         {
-            return dateTime.HasValue && (dateTime.Value != DateTime.MinValue || dateTime.Value != DateTime.MaxValue);
+            return dateTime.HasValue && dateTime.Value.IsValidationDateTime();
         }
 
         public static bool IsValidationDateTime(this DateTime dateTime)
         {
-            return dateTime != DateTime.MinValue || dateTime != DateTime.MaxValue;
+            return dateTime != DateTime.MinValue && dateTime != DateTime.MaxValue;
         }
 
         public static bool IsValidationDateTime(this string dateTime)
         {
-            return dateTime.IsNotNullOrWhiteSpace() && !dateTime.Contains(DateTime.MaxValue.ToString("yyyy")) && !dateTime.Contains(DateTime.MinValue.ToString("yyyy"));
+            return DateTime.TryParse(dateTime, out var parsedDate) && parsedDate.IsValidationDateTime();
         }
 
         public static string ToStandardDateString(this DateTime dateTime)
@@ -154,6 +154,18 @@
             var start = TimeZoneInfo.ConvertTime(new DateTime(1970, 1, 1), TimeZoneInfo.Local);
             TimeSpan span = new TimeSpan(long.Parse(timestamp + "0000000"));
             return start.Add(span).Add(new TimeSpan(8, 0, 0));
+        }
+
+        /// <summary>
+        /// 将 Timestamp 转换为本地 DateTime（精确到毫秒）
+        /// </summary>
+        public static DateTime? ToLocalDateTime(this Timestamp timestamp)
+        {
+            if (!timestamp.IsValid)
+                return null;
+
+            long milliseconds = timestamp.NanosecondsSinceUnixEpoch / 1_000_000;
+            return DateTimeOffset.FromUnixTimeMilliseconds(milliseconds).LocalDateTime;
         }
 
         /// <summary>
